@@ -20,6 +20,8 @@ public class Simple {
         }
 
         System.out.println(fib(45));
+        System.out.println(isValidSymbol("([}}])"));
+        System.out.println(isValidSymbol("[(])"));
     }
 
     /**
@@ -109,5 +111,42 @@ public class Simple {
             }
             return numbers[tail];
         }
+    }
+
+
+    /**
+     * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+     * 有效字符串需满足：
+     * 左括号必须用相同类型的右括号闭合。
+     * 左括号必须以正确的顺序闭合。
+     */
+    public static boolean isValidSymbol(String s) {
+        if (s.isEmpty() || (s.length() & 1) == 1) {
+            return false;
+        }
+        Stack<Character> stack = new Stack<>();
+        char[] chars = s.toCharArray();
+        stack.push(chars[0]);
+        for (int i = 1; i < chars.length; i++) {
+            if (chars[i] == '(' || chars[i] == '[' || chars[i] == '{') {
+                stack.push(chars[i]);
+            } else {
+                if (stack.isEmpty()) {
+                    // 说明开头是右括号了
+                    return false;
+                }
+                Character peek = stack.peek();
+                if (peek == '(' && chars[i] == ')') {
+                    stack.pop();
+                } else if (peek == '[' && chars[i] == ']') {
+                    stack.pop();
+                } else if (peek == '{' && chars[i] == '}') {
+                    stack.pop();
+                } else {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
     }
 }
