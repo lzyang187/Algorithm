@@ -28,7 +28,28 @@ public class Simple {
 //        ListNode kthFromEnd = getKthFromEnd(third, 1);
 //        System.out.println(kthFromEnd);
 
-        System.out.println(reverseList(head));
+//        System.out.println(reverseList(head));
+
+//        System.out.println(mergeTwoLists(head, second));
+
+
+//        TreeNode root = new TreeNode(1);
+//        TreeNode left = new TreeNode(2);
+//        TreeNode right = new TreeNode(3);
+//        root.left = left;
+//        root.right = right;
+//        System.out.println(root);
+//        System.out.println(mirrorTree(root));
+
+//        MinStack minStack = new MinStack();
+//        minStack.push(3);
+//        minStack.push(2);
+//        minStack.push(4);
+//        System.out.println(minStack.min());
+//        minStack.pop();
+//        System.out.println(minStack.min());
+
+        System.out.println(validateStackSequences(new int[]{1, 0}, new int[]{1, 0}));
     }
 
     /**
@@ -263,22 +284,129 @@ public class Simple {
         if (head == null || head.next == null) {
             return head;
         }
-        Stack<Integer> stack = new Stack<>();
+        ListNode preNode = null;
         ListNode curNode = head;
+        ListNode nextNode;
         while (curNode != null) {
-            stack.push(curNode.val);
-            curNode = curNode.next;
+            nextNode = curNode.next;
+            curNode.next = preNode;
+            preNode = curNode;
+            curNode = nextNode;
         }
-        int temp;
-        temp = stack.pop();
-        ListNode newNode = new ListNode(temp);
-        curNode = newNode;
-        int size = stack.size();
-        for (int i = 0; i < size; i++) {
-            temp = stack.pop();
-            curNode.next = new ListNode(temp);
-            curNode = curNode.next;
-        }
-        return newNode;
+        return preNode;
     }
+
+    /**
+     * 输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
+     */
+    public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        } else if (l2 == null) {
+            return l1;
+        }
+        int l1Val = l1.val;
+        int l2Val = l2.val;
+        ListNode result;
+        if (l1Val <= l2Val) {
+            result = new ListNode(l1Val);
+            result.next = mergeTwoLists(l1.next, l2);
+        } else {
+            result = new ListNode(l2Val);
+            result.next = mergeTwoLists(l1, l2.next);
+        }
+        return result;
+    }
+
+
+    /**
+     * 输入一个二叉树，该函数输出它的镜像。
+     *
+     * @param root
+     * @return
+     */
+    public static TreeNode mirrorTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        // 是否是叶子节点
+        if (root.left == null && root.right == null) {
+            return root;
+        }
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        mirrorTree(root.left);
+        mirrorTree(root.right);
+        return root;
+    }
+
+
+    /**
+     * 判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的
+     */
+    public boolean isSymmetric(TreeNode root) {
+        return isSymmetric(root, root);
+    }
+
+    /**
+     * 对于树中 任意两个对称节点 L 和 R
+     * L.val=R.val ：即此两对称节点值相等。
+     * L.left.val = R.right.val：即 L 的 左子节点 和 R 的 右子节点 对称
+     * L.right.val = R.left.val：即 L 的 右子节点 和 R 的 左子节点 对称
+     */
+    public boolean isSymmetric(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) {
+            return true;
+        }
+        if (root1 == null || root2 == null) {
+            return false;
+        }
+        if (root1.val != root2.val) {
+            return false;
+        }
+        return isSymmetric(root1.left, root2.right) &&
+                isSymmetric(root1.right, root2.left);
+    }
+
+    /**
+     * 输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。
+     * 假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，
+     * 但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。
+     */
+    public static boolean validateStackSequences(int[] pushed, int[] popped) {
+        if (pushed.length == 0 && popped.length == 0) {
+            return true;
+        }
+        if (pushed.length <= 0 || popped.length <= 0) {
+            return false;
+        }
+        Stack<Integer> stack = new Stack<>();
+        int pushIndex = 0;
+        stack.push(pushed[pushIndex]);
+        int popIndex = 0;
+        while (pushIndex < pushed.length) {
+            while (stack.peek() != popped[popIndex]) {
+                pushIndex++;
+                if (pushIndex == pushed.length) {
+                    break;
+                }
+                stack.push(pushed[pushIndex]);
+            }
+            if (pushIndex == pushed.length) {
+                break;
+            }
+            stack.pop();
+            popIndex++;
+            if (popIndex == popped.length) {
+                break;
+            }
+            if (stack.empty()) {
+                pushIndex++;
+                stack.push(pushed[pushIndex]);
+            }
+        }
+        return popIndex == popped.length;
+    }
+
 }
