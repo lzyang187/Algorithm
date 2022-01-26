@@ -1,5 +1,7 @@
 package simple;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -33,13 +35,19 @@ public class Simple {
 //        System.out.println(mergeTwoLists(head, second));
 
 
-//        TreeNode root = new TreeNode(1);
-//        TreeNode left = new TreeNode(2);
-//        TreeNode right = new TreeNode(3);
-//        root.left = left;
-//        root.right = right;
+        TreeNode root = new TreeNode(1);
+        TreeNode left = new TreeNode(2);
+        TreeNode right = new TreeNode(3);
+        root.left = left;
+        root.right = right;
 //        System.out.println(root);
 //        System.out.println(mirrorTree(root));
+
+        List<Integer> integers = preorderTraversal(root);
+        for (Integer integer : integers) {
+            System.out.print(integer);
+        }
+
 
 //        MinStack minStack = new MinStack();
 //        minStack.push(3);
@@ -49,7 +57,16 @@ public class Simple {
 //        minStack.pop();
 //        System.out.println(minStack.min());
 
-        System.out.println(validateStackSequences(new int[]{1, 0}, new int[]{1, 0}));
+//        System.out.println(validateStackSequences(new int[]{1, 0}, new int[]{1, 0}));
+
+//        int[][] m = {{4, 5, 6, 8}, {6, 2, 7, 3}, {6, 8, 2, 8}, {1, 6, 7, 3}};
+//        int[] ints = spiralOrder(m);
+//        for (int anInt : ints) {
+//            System.out.print(anInt);
+//        }
+
+//        System.out.println(addStrings("0", "0"));
+
     }
 
     /**
@@ -444,6 +461,140 @@ public class Simple {
             }
         }
         return popIndex == popped.length;
+    }
+
+    /**
+     * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字
+     */
+    public static int[] spiralOrder(int[][] matrix) {
+        if (matrix == null || matrix.length <= 0 || matrix[0].length <= 0) {
+            return new int[]{};
+        }
+        int[] resultArray = new int[matrix.length * matrix[0].length];
+        int curArrayIndex = 0;
+        int startRow = 0;
+        int startCol = 0;
+        int endRow = matrix.length - 1;
+        int endCol = matrix[0].length - 1;
+        while (startRow <= endRow && startCol <= endCol) {
+            int curRow = startRow;
+            int curCol = startCol;
+            if (startRow == endRow) {
+                // 只有一行了
+                while (curCol <= endCol) {
+                    resultArray[curArrayIndex] = matrix[startRow][curCol];
+                    curArrayIndex++;
+                    curCol++;
+                }
+            } else if (startCol == endCol) {
+                // 只有一列了
+                while (curRow <= endRow) {
+                    resultArray[curArrayIndex] = matrix[curRow][startCol];
+                    curArrayIndex++;
+                    curRow++;
+                }
+            } else {
+                // 一周
+                // 上
+                while (curCol <= endCol) {
+                    resultArray[curArrayIndex] = matrix[startRow][curCol];
+                    curArrayIndex++;
+                    curCol++;
+                }
+                // 右
+                curRow++;
+                while (curRow <= endRow) {
+                    resultArray[curArrayIndex] = matrix[curRow][endCol];
+                    curArrayIndex++;
+                    curRow++;
+                }
+                // 下
+                curCol -= 2;
+                while (curCol >= startCol) {
+                    resultArray[curArrayIndex] = matrix[endRow][curCol];
+                    curArrayIndex++;
+                    curCol--;
+                }
+                // 左
+                curRow -= 2;
+                while (curRow > startRow) {
+                    resultArray[curArrayIndex] = matrix[curRow][startCol];
+                    curArrayIndex++;
+                    curRow--;
+                }
+            }
+            startRow++;
+            startCol++;
+            endRow--;
+            endCol--;
+        }
+        return resultArray;
+    }
+
+    /**
+     * 给定两个字符串形式的非负整数num1和num2，计算它们的和并同样以字符串形式返回。
+     * 你不能使用任何內建的用于处理大整数的库（比如 BigInteger），也不能直接将输入的字符串转换为整数形式。
+     */
+    public static String addStrings(String num1, String num2) {
+        if (num1 == null || num1.isEmpty()) {
+            return num2;
+        } else if (num2 == null || num2.isEmpty()) {
+            return num1;
+        }
+        char[] num1Chars = new char[num1.length()];
+        for (int i = 0; i < num1.length(); i++) {
+            num1Chars[i] = num1.charAt(num1.length() - 1 - i);
+        }
+        char[] num2Chars = new char[num2.length()];
+        for (int i = 0; i < num2.length(); i++) {
+            num2Chars[i] = num2.charAt(num2.length() - 1 - i);
+        }
+        // 结果数组的最大长度是较大整数的位数+1
+        int maxSize = Math.max(num1Chars.length, num2Chars.length);
+        int[] results = new int[maxSize + 1];
+        for (int i = 0; i < maxSize; i++) {
+            int result = results[i];
+            if (i < num1Chars.length) {
+                // 将字符转换为对应的int，'9' 转换为9
+                result += (num1Chars[i] - '0');
+            }
+            if (i < num2Chars.length) {
+                result += (num2Chars[i] - '0');
+            }
+            // 进位
+            if (result > 9) {
+                results[i + 1] = 1;
+                result = result % 10;
+            }
+            results[i] = result;
+        }
+        StringBuilder sb = new StringBuilder();
+        boolean flag = true;
+        for (int i = results.length - 1; i >= 0; i--) {
+            if (flag && results[i] == 0) {
+                continue;
+            }
+            flag = false;
+            sb.append(results[i]);
+        }
+        if (sb.length() == 0) {
+            return "0";
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 给你二叉树的根节点 root ，返回它节点值的 前序 遍历。
+     */
+    public static List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> results = new ArrayList<>();
+        if (root == null) {
+            return results;
+        }
+        results.add(root.val);
+        results.addAll(preorderTraversal(root.left));
+        results.addAll(preorderTraversal(root.right));
+        return results;
     }
 
 }
