@@ -43,7 +43,12 @@ public class Simple {
 //        System.out.println(root);
 //        System.out.println(mirrorTree(root));
 
-        List<Integer> integers = preorderTraversal(root);
+//        List<Integer> integers = preorderTraversal(root);
+//        for (Integer integer : integers) {
+//            System.out.print(integer);
+//        }
+
+        List<Integer> integers = inorderTraversal(root);
         for (Integer integer : integers) {
             System.out.print(integer);
         }
@@ -595,6 +600,52 @@ public class Simple {
         results.addAll(preorderTraversal(root.left));
         results.addAll(preorderTraversal(root.right));
         return results;
+    }
+
+    /**
+     * 树的非递归中序遍历
+     */
+    public static List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> results = new ArrayList<>();
+        if (root == null) {
+            return results;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curNode = root;
+        stack.push(curNode);
+        while (curNode != null || !stack.isEmpty()) {
+            if (curNode != null && curNode.left != null) {
+                stack.push(curNode.left);
+                curNode = curNode.left;
+            } else {
+                TreeNode pop = stack.pop();
+                results.add(pop.val);
+                curNode = pop.right;
+                if (curNode != null) {
+                    stack.push(curNode);
+                }
+            }
+        }
+        return results;
+    }
+
+    /**
+     * 给你一个链表的头节点 head ，判断链表中是否有环。
+     */
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = slow.next;
+        while (slow != fast) {
+            slow = slow.next;
+            if (fast.next == null || fast.next.next == null) {
+                return false;
+            }
+            fast = fast.next.next;
+        }
+        return true;
     }
 
 }
