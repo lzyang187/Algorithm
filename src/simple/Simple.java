@@ -48,10 +48,10 @@ public class Simple {
 //            System.out.print(integer);
 //        }
 
-        List<Integer> integers = inorderTraversal(root);
-        for (Integer integer : integers) {
-            System.out.print(integer);
-        }
+//        List<Integer> integers = inorderTraversal(root);
+//        for (Integer integer : integers) {
+//            System.out.print(integer);
+//        }
 
 
 //        MinStack minStack = new MinStack();
@@ -71,6 +71,9 @@ public class Simple {
 //        }
 
 //        System.out.println(addStrings("0", "0"));
+
+        ListNode listNode = removeNthFromEnd(third, 1);
+        System.out.println(listNode);
 
     }
 
@@ -648,4 +651,34 @@ public class Simple {
         return true;
     }
 
+    /**
+     * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+     */
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head == null || n <= 0) {
+            return head;
+        }
+        ListNode front = head;
+        int count = 0;
+        while (count < n) {
+            count++;
+            if (front.next == null) {
+                if (count == n) {
+                    // 正好删除头结点
+                    return head.next;
+                } else {
+                    // 长度不够n
+                    return head;
+                }
+            }
+            front = front.next;
+        }
+        ListNode back = head;
+        while (front.next != null) {
+            front = front.next;
+            back = back.next;
+        }
+        back.next = back.next.next;
+        return head;
+    }
 }
