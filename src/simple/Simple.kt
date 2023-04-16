@@ -1,7 +1,5 @@
 package simple
 
-import java.util.*
-
 fun main() {
 //    println(simple.reverse(-120))
 //    val queue = TwoStackQueue()
@@ -19,6 +17,8 @@ fun main() {
     println(stack.top())
     println(stack.pop())
     println(stack.empty())
+
+    println(reverse(-4236469))
 }
 
 
@@ -27,18 +27,19 @@ fun main() {
  * 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出和为目标值 target  的那两个整数，
  * 并返回它们的数组下标
  */
-fun twoSum(nums: IntArray?, target: Int): IntArray {
+fun twoSum(nums: IntArray?, target: Int): IntArray? {
+    if (nums == null || nums.size <= 1) {
+        return null
+    }
     val result = IntArray(2)
-    if (nums != null) {
-        for (i in 0 until nums.size - 1) {
-            for (j in i + 1 until nums.size) {
-                if (nums[i] + nums[j] == target) {
-                    result[0] = i
-                    result[1] = j
-                    println(result[0])
-                    println(result[1])
-                    return result
-                }
+    for (i in 0 until nums.size - 1) {
+        for (j in i + 1 until nums.size) {
+            if (nums[i] + nums[j] == target) {
+                result[0] = i
+                result[1] = j
+                println(result[0])
+                println(result[1])
+                return result
             }
         }
     }
@@ -53,27 +54,20 @@ fun twoSum(nums: IntArray?, target: Int): IntArray {
  */
 
 fun reverse(x: Int): Int {
-    val str = x.toString()
-    val split = str.split("")
-    if (split.isNullOrEmpty()) {
+    if (x in -9..9) {
+        return x
+    }
+    var result = 0L
+    var temp = x
+    while (temp != 0) {
+        result = result * 10 + temp % 10
+        temp /= 10
+    }
+    // 判断是否越界
+    if (result > Int.MAX_VALUE || result < Int.MIN_VALUE) {
         return 0
     }
-    val filter = split.filter {
-        it != ""
-    }
-    val sb = StringBuilder()
-    for (i in filter.size - 1 downTo 1) {
-        if (filter[i] == "0" && sb.isEmpty()) {
-            continue
-        }
-        sb.append(filter[i])
-    }
-    val result: String = if (filter[0] == "-") {
-        ("-$sb")
-    } else {
-        sb.append(filter[0]).toString()
-    }
-    return result.toIntOrNull() ?: 0
+    return result.toInt()
 }
 
 /**
@@ -94,54 +88,6 @@ fun findRepeatNumber(nums: IntArray): Int {
     }
     return -1
 }
-
-/**
- * 二维数组中的查找
- * 在一个 n * m 的二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。
- * 请完成一个高效的函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数
- */
-fun findNumberIn2DArray(matrix: Array<IntArray>, target: Int): Boolean {
-    if (matrix.isNullOrEmpty()) {
-        return false
-    }
-    if (!matrix.first().isNotEmpty()) {
-        return false
-    }
-    val mutableArray = mutableListOf<MutableList<Int>>()
-    matrix.forEach {
-        val subArray = mutableListOf<Int>()
-        for (i in 0 until it.size) {
-            subArray.add(it[i])
-        }
-        mutableArray.add(subArray)
-    }
-    return realFindNumberIn2DArray(mutableArray, target)
-}
-
-fun realFindNumberIn2DArray(matrix: MutableList<MutableList<Int>>, target: Int): Boolean {
-    if (matrix.isNullOrEmpty()) {
-        return false
-    }
-    if (!matrix.first().isNotEmpty()) {
-        return false
-    }
-    // 找到第一行最后一个元素
-    val rightTop = matrix.first().last()
-    if (rightTop == target) {
-        return true
-    } else if (rightTop > target) {
-        // 去掉最后一列
-        matrix.forEach {
-            it.removeAt(it.size - 1)
-        }
-        return realFindNumberIn2DArray(matrix, target)
-    } else {
-        // 去掉第一行
-        matrix.removeAt(0)
-        return realFindNumberIn2DArray(matrix, target)
-    }
-}
-
 
 /**
  * 替换空格

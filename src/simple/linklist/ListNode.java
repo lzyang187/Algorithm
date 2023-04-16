@@ -1,4 +1,4 @@
-package simple;
+package simple.linklist;
 
 /**
  * 单链表的定义
@@ -10,7 +10,7 @@ public class ListNode {
     public int val;
     public ListNode next;
 
-    ListNode(int x) {
+    public ListNode(int x) {
         val = x;
     }
 

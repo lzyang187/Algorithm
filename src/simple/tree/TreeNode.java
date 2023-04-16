@@ -1,4 +1,4 @@
-package simple;
+package simple.tree;
 
 /**
  * 二叉树的定义
@@ -11,7 +11,7 @@ public class TreeNode {
     public TreeNode left;
     public TreeNode right;
 
-    TreeNode(int x) {
+    public TreeNode(int x) {
         val = x;
     }
 
