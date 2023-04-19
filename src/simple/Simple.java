@@ -189,4 +189,24 @@ public class Simple {
         return popIndex == popped.length;
     }
 
+    /**
+     * 数值的整数次方
+     */
+    public static double myPow(double x, int n) {
+        if (x == 0) {
+            return 0;
+        } else if (x == 1 || n == 0) {
+            return 1;
+        }
+        int absN = Math.abs(n);
+        double result = 1.0;
+        for (int i = 0; i < absN; i++) {
+            result *= x;
+        }
+        if (n < 0) {
+            return 1 / result;
+        }
+        return result;
+    }
+
 }

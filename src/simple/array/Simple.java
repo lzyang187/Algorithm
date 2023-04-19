@@ -2,7 +2,13 @@ package simple.array;
 
 public class Simple {
     public static void main(String[] args) {
-
+//        System.out.println(removeDuplicates(new int[]{1, 1, 2}));
+//        System.out.println(removeElement(new int[]{3, 1, 2, 3, 5, 3, 3, 3, 7}, 3));
+//        System.out.println(searchInsert(new int[]{1, 3, 5, 6}, 5));
+        int[] result = plusOne(new int[]{9, 9});
+        for (int i = 0; i < result.length; i++) {
+            System.out.println(result[i]);
+        }
     }
 
     /**
@@ -142,5 +148,117 @@ public class Simple {
         return resultArray;
     }
 
+    /**
+     * 删除有序数组中的重复项：给你一个升序排列的数组nums，请你原地删除重复出现的元素，使每个元素只出现一次，返回删除后数组的新长度。
+     * 元素的相对顺序应该保持一致。
+     */
+    public static int removeDuplicates(int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+        if (nums.length <= 1) {
+            return 1;
+        }
+        int index = 0;
+        int left = 0;
+        int right = 1;
+        while (right < nums.length) {
+            if (nums[left] == nums[right]) {
+                // 相同
+            } else {
+                index++;
+                nums[index] = nums[right];
+                left = index;
+            }
+            right++;
+        }
+        return ++index;
+    }
+
+    /**
+     * 移除元素：给你一个数组nums和一个值val，你需要原地移除所有数值等于val的元素，并返回移除后数组的新长度。
+     */
+    public static int removeElement(int[] nums, int val) {
+        if (nums == null || nums.length < 1) {
+            return 0;
+        }
+        if (nums.length < 2) {
+            if (nums[0] == val) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+        int left = 0;
+        int right = 0;
+        while (right < nums.length) {
+            if (nums[right] == val) {
+
+            } else {
+                nums[left] = nums[right];
+                left++;
+            }
+            right++;
+        }
+        return left;
+    }
+
+    /**
+     * 搜索插入位置：给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+     * 请必须使用时间复杂度为 O(log n) 的算法。
+     */
+    public static int searchInsert(int[] nums, int target) {
+        if (nums == null || nums.length < 1) {
+            return 0;
+        }
+        int left = 0;
+        int right = nums.length - 1;
+        int mid;
+        while (left <= right) {
+            mid = (left + right) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+
+    /**
+     * 加一：给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
+     * 最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+     * 你可以假设除了整数 0 之外，这个整数不会以零开头。
+     */
+    public static int[] plusOne(int[] digits) {
+        if (digits == null) {
+            return null;
+        }
+        int[] result = new int[digits.length];
+        int plus = 1;
+        for (int i = digits.length - 1; i >= 0; i--) {
+            if (plus <= 0) {
+                result[i] = digits[i];
+            } else {
+                plus = digits[i] + plus;
+                if (i > 0) {
+                    result[i] = plus % 10;
+                } else {
+                    result[i] = plus;
+                }
+                plus = plus / 10;
+            }
+        }
+        // 如果首位是10
+        if (result[0] == 10) {
+            int[] realResult = new int[result.length + 1];
+            realResult[0] = 1;
+            // 其他位置都是0，不用赋值
+            return realResult;
+        }
+        return result;
+    }
 
 }
