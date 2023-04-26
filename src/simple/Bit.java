@@ -2,6 +2,8 @@ package simple;
 
 public class Bit {
     public static void main(String[] args) {
+//        System.out.println('0' ^ '0');
+//        System.out.println(smallestEvenMultiple(3));
 
     }
 
@@ -27,4 +29,19 @@ public class Bit {
             return (n & n - 1) == 0;
         }
     }
+
+    /**
+     * 最小偶倍数：给你一个正整数 n ，返回 2 和 n 的最小公倍数（正整数）。
+     */
+    public static int smallestEvenMultiple(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        if ((n & 1) == 0) {
+            return n;
+        }
+        return n << 1;
+    }
+
+
 }

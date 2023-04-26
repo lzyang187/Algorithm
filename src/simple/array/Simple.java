@@ -1,5 +1,7 @@
 package simple.array;
 
+import java.util.Arrays;
+
 public class Simple {
     public static void main(String[] args) {
 //        System.out.println(removeDuplicates(new int[]{1, 1, 2}));
@@ -9,11 +11,12 @@ public class Simple {
 //        for (int i = 0; i < result.length; i++) {
 //            System.out.println(result[i]);
 //        }
-        int[] num1 = new int[]{0};
-        merge2(num1, 0, new int[]{1}, 1);
-        for (int i = 0; i < num1.length; i++) {
-            System.out.print(num1[i] + " ");
-        }
+//        int[] num1 = new int[]{0};
+//        merge2(num1, 0, new int[]{1}, 1);
+//        for (int i = 0; i < num1.length; i++) {
+//            System.out.print(num1[i] + " ");
+//        }
+        System.out.println(majorityElement(new int[]{3, 3, 4}));
     }
 
     /**
@@ -318,4 +321,14 @@ public class Simple {
         }
     }
 
+    /**
+     * 多数元素：给定一个大小为 n 的数组nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 n/2 的元素。
+     * 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+     */
+    public static int majorityElement(int[] nums) {
+        // 先排序
+        Arrays.sort(nums);
+        // 中间的那个数就是多数元素
+        return nums[(nums.length - 1) >>> 1];
+    }
 }

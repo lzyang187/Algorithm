@@ -75,9 +75,6 @@ public class Simple {
 
 //        ListNode listNode = removeNthFromEnd(third, 1);
 //        System.out.println(listNode);
-
-        System.out.println(smallestEvenMultiple(3));
-
     }
 
     /**
@@ -207,19 +204,6 @@ public class Simple {
             return 1 / result;
         }
         return result;
-    }
-
-    /**
-     * 最小偶倍数：给你一个正整数 n ，返回 2 和 n 的最小公倍数（正整数）。
-     */
-    public static int smallestEvenMultiple(int n) {
-        if (n == 0) {
-            return 0;
-        }
-        if ((n & 1) == 0) {
-            return n;
-        }
-        return n << 1;
     }
 
 }
