@@ -75,6 +75,8 @@ public class Simple {
 
 //        ListNode listNode = removeNthFromEnd(third, 1);
 //        System.out.println(listNode);
+
+        System.out.println(mySqrt(2147395599));
     }
 
     /**
@@ -204,6 +206,35 @@ public class Simple {
             return 1 / result;
         }
         return result;
+    }
+
+    /**
+     * x的平方根：给你一个非负整数 x ，计算并返回 x 的 算术平方根。由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
+     * 注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。
+     */
+    public static int mySqrt(int x) {
+        if (x <= 0) {
+            return 0;
+        }
+        int left = 1;
+        int right = x;
+        int mid;
+        // 二分法
+        while (true) {
+            mid = (left + right) >>> 1;
+            if (mid == left) {
+                return mid;
+            }
+            // 要考虑越界
+            long midPow = ((long) mid) * ((long) mid);
+            if (midPow > x) {
+                right = mid;
+            } else if (midPow < x) {
+                left = mid;
+            } else {
+                return mid;
+            }
+        }
     }
 
 }

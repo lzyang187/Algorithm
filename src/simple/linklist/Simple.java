@@ -1,10 +1,16 @@
 package simple.linklist;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 public class Simple {
     public static void main(String[] args) {
-
+        ListNode head = new ListNode(1);
+        ListNode second = new ListNode(2);
+        head.next = second;
+        second = null;
+        System.out.println(head);
     }
 
     /**
@@ -87,16 +93,17 @@ public class Simple {
         if (head == null || head.next == null) {
             return head;
         }
-        ListNode preNode = null;
-        ListNode curNode = head;
-        ListNode nextNode;
-        while (curNode != null) {
-            nextNode = curNode.next;
-            curNode.next = preNode;
-            preNode = curNode;
-            curNode = nextNode;
+        ListNode cur = new ListNode(head.val);
+        cur.next = null;
+        ListNode next = head.next;
+        ListNode nextNext;
+        while (next != null) {
+            nextNext = next.next;
+            next.next = cur;
+            cur = next;
+            next = nextNext;
         }
-        return preNode;
+        return cur;
     }
 
     /**
@@ -171,4 +178,92 @@ public class Simple {
         return head;
     }
 
+    /**
+     * 相交链表：给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
+     * 题目数据 保证 整个链式结构中不存在环。
+     * 注意，函数返回结果后，链表必须 保持其原始结构 。
+     */
+    public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        Set<ListNode> set = new HashSet<>();
+        ListNode curA = headA;
+        while (curA != null) {
+            set.add(curA);
+            curA = curA.next;
+        }
+        ListNode curB = headB;
+        while (curB != null) {
+            if (set.contains(curB)) {
+                return curB;
+            }
+            curB = curB.next;
+        }
+        return null;
+    }
+
+    /**
+     * 链表的中间结点：给你单链表的头结点 head ，请你找出并返回链表的中间结点。如果有两个中间结点，则返回第二个中间结点。
+     */
+    public ListNode middleNode(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while (true) {
+            if (fast.next == null) {
+                break;
+            }
+            if (fast.next.next == null) {
+                slow = slow.next;
+                break;
+            }
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    /**
+     * 移除链表元素：给你一个链表的头节点 head 和一个整数 val ，请你删除链表中所有满足 Node.val == val 的节点，并返回 新的头节点 。
+     */
+    public ListNode removeElements(ListNode head, int val) {
+        if (head == null) {
+            return null;
+        }
+        // 找到头节点
+        while (head != null) {
+            if (head.val == val) {
+                head = head.next;
+            } else {
+                break;
+            }
+        }
+        ListNode pre = head;
+        ListNode cur = head;
+        while (cur != null) {
+            if (cur.val == val) {
+                // 移除此项
+                if (cur.next != null) {
+                    cur.val = cur.next.val;
+                    cur.next = cur.next.next;
+                } else {
+                    // 删除尾节点
+                    pre.next = null;
+                    break;
+                }
+            } else {
+                pre = cur;
+                cur = cur.next;
+            }
+        }
+        return head;
+    }
+
+    /**
+     * 二进制链表转整数：给你一个单链表的引用结点head。链表中每个结点的值不是 0 就是 1。已知此链表是一个整数数字的二进制表示形式。
+     * 请你返回该链表所表示数字的 十进制值 。
+     */
 }
