@@ -1,6 +1,6 @@
 package simple.array;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Simple {
     public static void main(String[] args) {
@@ -16,7 +16,9 @@ public class Simple {
 //        for (int i = 0; i < num1.length; i++) {
 //            System.out.print(num1[i] + " ");
 //        }
-        System.out.println(majorityElement(new int[]{3, 3, 4}));
+//        System.out.println(majorityElement(new int[]{3, 3, 4}));
+//        System.out.println(containsNearbyDuplicate(new int[]{1, 0, 1, 1}, 1));
+        System.out.println(luckyNumbers(new int[][]{{3, 6}, {7, 1}, {5, 2}, {4, 8}}));
     }
 
     /**
@@ -331,4 +333,89 @@ public class Simple {
         // 中间的那个数就是多数元素
         return nums[(nums.length - 1) >>> 1];
     }
+
+    /**
+     * 存在重复元素：给你一个整数数组 nums 。如果任一值在数组中出现 至少两次 ，返回 true ；如果数组中每个元素互不相同，返回 false 。
+     */
+    public static boolean containsDuplicate(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return false;
+        }
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (set.contains(num)) {
+                return true;
+            } else {
+                set.add(num);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 存在重复元素 II：给你一个整数数组nums 和一个整数k ，判断数组中是否存在两个 不同的索引i和j ，
+     * 满足 nums[i] == nums[j] 且 abs(i - j) <= k 。如果存在，返回 true ；否则，返回 false 。
+     */
+    public static boolean containsNearbyDuplicate(int[] nums, int k) {
+        if (nums == null || nums.length <= 1) {
+            return false;
+        }
+        // Map的Key为数组的value，Value为数组的Index
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(nums[i])) {
+                int j = map.get(nums[i]);
+                if (Math.abs(i - j) <= k) {
+                    return true;
+                }
+            }
+            map.put(nums[i], i);
+        }
+        return false;
+    }
+
+    /**
+     * 矩阵中的幸运数：给你一个 m * n 的矩阵，矩阵中的数字 各不相同 。请你按 任意 顺序返回矩阵中的所有幸运数。
+     * 幸运数 是指矩阵中满足同时下列两个条件的元素：
+     * 在同一行的所有元素中最小
+     * 在同一列的所有元素中最大
+     */
+    public static List<Integer> luckyNumbers(int[][] matrix) {
+        if (matrix == null || matrix.length <= 0 || matrix[0].length <= 0) {
+            return null;
+        }
+        List<Integer> list = new ArrayList<>();
+        int colMinIndex;
+        int rowMaxIndex;
+        // 记录已经找到了幸运数字的列，后面就不用再处理这些列了
+        Set<Integer> colSet = new HashSet<>();
+        for (int row = 0; row < matrix.length; row++) {
+            // 找row行最小值的列索引
+            colMinIndex = 0;
+            for (int col = 1; col < matrix[row].length; col++) {
+                if (matrix[row][col] < matrix[row][colMinIndex]) {
+                    colMinIndex = col;
+                }
+            }
+            if (colSet.contains(colMinIndex)) {
+                continue;
+            }
+            // 在对应的列中值是不是最大的
+            rowMaxIndex = row;
+            for (int secondRow = 0; secondRow < matrix.length; secondRow++) {
+                if (matrix[secondRow][colMinIndex] > matrix[row][colMinIndex]) {
+                    // 不是幸运数字
+                    rowMaxIndex = secondRow;
+                    break;
+                }
+            }
+            if (rowMaxIndex == row) {
+                // 是幸运数字
+                list.add(matrix[row][colMinIndex]);
+                colSet.add(colMinIndex);
+            }
+        }
+        return list;
+    }
+
 }
