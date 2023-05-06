@@ -14,7 +14,9 @@ public class Simple {
 //        for (int i = 0; i < chars.length; i++) {
 //            System.out.print(chars[i]);
 //        }
-        System.out.println(isPalindromeDigit(-121));
+//        System.out.println(isPalindromeDigit(-121));
+//        System.out.println(backspaceCompare("ab#cd", "ad#c"));
+        System.out.println(makeGood("aAbbbCcDd"));
     }
 
     /**
@@ -305,5 +307,78 @@ public class Simple {
         }
     }
 
+
+    /**
+     * 比较含退格的字符串：给定 s 和 t 两个字符串，当它们分别被输入到空白的文本编辑器后，如果两者相等，返回 true 。# 代表退格字符。
+     * 注意：如果对空文本输入退格字符，文本继续为空。
+     */
+    public static boolean backspaceCompare(String s, String t) {
+        if (s == null || s.isEmpty()) {
+            return t == null || t.isEmpty();
+        }
+        if (t == null || t.isEmpty()) {
+            return false;
+        }
+        StringBuilder s1 = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '#') {
+                if (s1.length() > 0) {
+                    s1.delete(s1.length() - 1, s1.length());
+                }
+            } else {
+                s1.append(s.charAt(i));
+            }
+        }
+        StringBuilder s2 = new StringBuilder();
+        for (int i = 0; i < t.length(); i++) {
+            if (t.charAt(i) == '#') {
+                if (s2.length() > 0) {
+                    s2.delete(s2.length() - 1, s2.length());
+                }
+            } else {
+                s2.append(t.charAt(i));
+            }
+        }
+        return s1.toString().equals(s2.toString());
+    }
+
+    /**
+     * 整理字符串：给你一个由大小写英文字母组成的字符串 s 。
+     * 一个整理好的字符串中，两个相邻字符 s[i] 和 s[i+1]，其中 0<= i <= s.length-2 ，要满足如下条件:
+     * 若 s[i] 是小写字符，则 s[i+1] 不可以是相同的大写字符。
+     * 若 s[i] 是大写字符，则 s[i+1] 不可以是相同的小写字符。
+     * 请你将字符串整理好，每次你都可以从字符串中选出满足上述条件的 两个相邻 字符并删除，直到字符串整理好为止。
+     * 请返回整理好的 字符串 。题目保证在给出的约束条件下，测试样例对应的答案是唯一的。
+     * 注意：空字符串也属于整理好的字符串，尽管其中没有任何字符。
+     */
+    public static String makeGood(String s) {
+        if (s == null || s.length() <= 1) {
+            return s;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (sb.length() <= 0) {
+                sb.append(s.charAt(i));
+            } else {
+                char last = sb.charAt(sb.length() - 1);
+                if (last >= 'a' && last <= 'z') {
+                    // 是小写字母
+                    if ((s.charAt(i) - 'A') == (last - 'a')) {
+                        sb.delete(sb.length() - 1, sb.length());
+                    } else {
+                        sb.append(s.charAt(i));
+                    }
+                } else {
+                    // 是大写字母
+                    if ((last - 'A') == (s.charAt(i) - 'a')) {
+                        sb.delete(sb.length() - 1, sb.length());
+                    } else {
+                        sb.append(s.charAt(i));
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
 
 }

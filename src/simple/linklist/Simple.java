@@ -1,16 +1,15 @@
 package simple.linklist;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class Simple {
     public static void main(String[] args) {
         ListNode head = new ListNode(1);
         ListNode second = new ListNode(2);
         head.next = second;
-        second = null;
-        System.out.println(head);
+//        second = null;
+//        System.out.println(head);
+        System.out.println(deleteNode(head, second));
     }
 
     /**
@@ -42,11 +41,14 @@ public class Simple {
         if (head == null || delNode == null) {
             return head;
         }
+        if (head == delNode) {
+            return null;
+        }
         if (delNode.next == null) {
             // 要删除的节点是尾节点，只能遍历才能找到前面一个节点了
             ListNode preNode = head;
             ListNode curNode = head.next;
-            while (curNode.val != delNode.val) {
+            while (curNode != delNode) {
                 preNode = curNode;
                 curNode = curNode.next;
             }
@@ -260,6 +262,30 @@ public class Simple {
             }
         }
         return head;
+    }
+
+    /**
+     * 回文链表：给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。
+     */
+    public boolean isPalindrome(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        List<Integer> list = new ArrayList<>();
+        while (head != null) {
+            list.add(head.val);
+            head = head.next;
+        }
+        int left = 0;
+        int right = list.size() - 1;
+        while (left < right) {
+            if (list.get(left) != list.get(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
 
 }
