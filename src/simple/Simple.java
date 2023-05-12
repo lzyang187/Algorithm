@@ -3,8 +3,6 @@ package simple;
 import simple.linklist.ListNode;
 import simple.tree.TreeNode;
 
-import java.util.Stack;
-
 /**
  * @author: cyli8
  * @date: 2021-12-19 16:07
@@ -76,7 +74,7 @@ public class Simple {
 //        ListNode listNode = removeNthFromEnd(third, 1);
 //        System.out.println(listNode);
 
-        System.out.println(mySqrt(2147395599));
+//        System.out.println(mySqrt(2147395599));
     }
 
     /**
@@ -146,46 +144,6 @@ public class Simple {
             array[i] = i + 1;
         }
         return array;
-    }
-
-    /**
-     * 输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。
-     * 假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，
-     * 但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。
-     */
-    public static boolean validateStackSequences(int[] pushed, int[] popped) {
-        if (pushed.length == 0 && popped.length == 0) {
-            return true;
-        }
-        if (pushed.length <= 0 || popped.length <= 0) {
-            return false;
-        }
-        Stack<Integer> stack = new Stack<>();
-        int pushIndex = 0;
-        stack.push(pushed[pushIndex]);
-        int popIndex = 0;
-        while (pushIndex < pushed.length) {
-            while (stack.peek() != popped[popIndex]) {
-                pushIndex++;
-                if (pushIndex == pushed.length) {
-                    break;
-                }
-                stack.push(pushed[pushIndex]);
-            }
-            if (pushIndex == pushed.length) {
-                break;
-            }
-            stack.pop();
-            popIndex++;
-            if (popIndex == popped.length) {
-                break;
-            }
-            if (stack.empty()) {
-                pushIndex++;
-                stack.push(pushed[pushIndex]);
-            }
-        }
-        return popIndex == popped.length;
     }
 
     /**

@@ -32,7 +32,7 @@ public class Simple {
     }
 
     /**
-     * 判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的
+     * 判断一棵二叉树是不是对称的。
      */
     public boolean isSymmetric(TreeNode root) {
         return isSymmetric(root, root);
@@ -97,4 +97,77 @@ public class Simple {
         }
         return results;
     }
+
+    /**
+     * 相同的树：给你两棵二叉树的根节点 p 和 q ，编写一个函数来检验这两棵树是否相同。
+     * 如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
+     */
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        } else if (p == null || q == null) {
+            return false;
+        }
+        return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+
+    /**
+     * 二叉树的最大深度：给定一个二叉树，找出其最大深度。
+     * 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int count = 1;
+        return count + Math.max(maxDepth(root.left), maxDepth(root.right));
+    }
+
+    /**
+     * 二叉树的最小深度：给定一个二叉树，找出其最小深度。
+     * 最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+     */
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int count = 1;
+        if (root.left == null) {
+            return count + minDepth(root.right);
+        } else if (root.right == null) {
+            return count + minDepth(root.left);
+        }
+        return count + Math.min(minDepth(root.left), minDepth(root.right));
+    }
+
+    /**
+     * 左叶子之和：给定二叉树的根节点 root ，返回所有左叶子之和。
+     */
+    public int sumOfLeftLeaves(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int count = 0;
+        if (root.left != null && root.left.left == null && root.left.right == null) {
+            // 是左叶子
+            count += root.left.val;
+        }
+        return count + sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right);
+    }
+
+    /**
+     * 路径总和：给你二叉树的根节点root 和一个表示目标和的整数targetSum 。判断该树中是否存在 根节点到叶子节点 的路径，
+     * 这条路径上所有节点值相加等于目标和targetSum 。如果存在，返回 true ；否则，返回 false 。
+     */
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return false;
+        }
+        if (root.left == null && root.right == null) {
+            // 是叶子节点
+            return root.val == targetSum;
+        }
+        return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val);
+    }
+
 }

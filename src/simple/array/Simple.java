@@ -18,14 +18,15 @@ public class Simple {
 //        }
 //        System.out.println(majorityElement(new int[]{3, 3, 4}));
 //        System.out.println(containsNearbyDuplicate(new int[]{1, 0, 1, 1}, 1));
-        System.out.println(luckyNumbers(new int[][]{{3, 6}, {7, 1}, {5, 2}, {4, 8}}));
+//        System.out.println(luckyNumbers(new int[][]{{3, 6}, {7, 1}, {5, 2}, {4, 8}}));
+        printNumbersMax(10);
     }
 
     /**
-     * 旋转数组的最小数字
-     *
-     * @param numbers
-     * @return
+     * 旋转数组的最小数字：把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。
+     * 给你一个可能存在重复元素值的数组numbers，它原来是一个升序排列的数组，并按上述情形进行了一次旋转。请返回旋转数组的最小元素。
+     * 例如，数组[3,4,5,1,2] 为 [1,2,3,4,5] 的一次旋转，该数组的最小值为 1。
+     * 注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
      */
     public int minArray(int[] numbers) {
         if (numbers.length == 0) {
@@ -163,10 +164,10 @@ public class Simple {
      * 元素的相对顺序应该保持一致。
      */
     public static int removeDuplicates(int[] nums) {
-        if (nums == null) {
+        if (nums == null || nums.length <= 0) {
             return 0;
         }
-        if (nums.length <= 1) {
+        if (nums.length == 1) {
             return 1;
         }
         int index = 0;
@@ -189,10 +190,10 @@ public class Simple {
      * 移除元素：给你一个数组nums和一个值val，你需要原地移除所有数值等于val的元素，并返回移除后数组的新长度。
      */
     public static int removeElement(int[] nums, int val) {
-        if (nums == null || nums.length < 1) {
+        if (nums == null || nums.length <= 0) {
             return 0;
         }
-        if (nums.length < 2) {
+        if (nums.length == 1) {
             if (nums[0] == val) {
                 return 0;
             } else {
@@ -236,6 +237,29 @@ public class Simple {
         }
         return left;
     }
+
+    /**
+     * 打印从1到最大的n位数，考虑大数。模拟字符串+1
+     */
+    public static void printNumbersMax(int n) {
+        if (n <= 0) {
+            return;
+        }
+        int[] digits = new int[n];
+        boolean loop;
+        do {
+            digits = plusOne(digits);
+            loop = false;
+            for (int digit : digits) {
+                if (digit != 9) {
+                    loop = true;
+                    break;
+                }
+            }
+            System.out.println(Arrays.toString(digits));
+        } while (loop);
+    }
+
 
     /**
      * 加一：给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。

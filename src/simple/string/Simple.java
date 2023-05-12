@@ -5,6 +5,7 @@ public class Simple {
 //        System.out.println(romanToInt("IX"));
 //        System.out.println(longestCommonPrefix(new String[]{"flower", "flow", "flight"}));
 //        System.out.println(addBinary("0", "0"));
+        System.out.println(addStrings("0", "0"));
 //        System.out.println(lengthOfLastWord("a bb d   "));
 //        System.out.println(isPalindrome("A man, a plan, a canal: Panama"));
 //        System.out.println(convertToExcelTitle(53));
@@ -30,44 +31,38 @@ public class Simple {
         } else if (num2 == null || num2.isEmpty()) {
             return num1;
         }
-        char[] num1Chars = new char[num1.length()];
-        for (int i = 0; i < num1.length(); i++) {
-            num1Chars[i] = num1.charAt(num1.length() - 1 - i);
-        }
-        char[] num2Chars = new char[num2.length()];
-        for (int i = 0; i < num2.length(); i++) {
-            num2Chars[i] = num2.charAt(num2.length() - 1 - i);
-        }
-        // 结果数组的最大长度是较大整数的位数+1
-        int maxSize = Math.max(num1Chars.length, num2Chars.length);
-        int[] results = new int[maxSize + 1];
-        for (int i = 0; i < maxSize; i++) {
-            int result = results[i];
-            if (i < num1Chars.length) {
-                // 将字符转换为对应的int，'9' 转换为9
-                result += (num1Chars[i] - '0');
+        if (num1.length() > num2.length()) {
+            // num2前面用0补齐
+            StringBuilder sb = new StringBuilder(num2);
+            for (int i = 0; i < (num1.length() - num2.length()); i++) {
+                sb.insert(0, '0');
             }
-            if (i < num2Chars.length) {
-                result += (num2Chars[i] - '0');
+            num2 = sb.toString();
+        } else if (num2.length() > num1.length()) {
+            // num1前面用0补齐
+            StringBuilder sb = new StringBuilder(num1);
+            for (int i = 0; i < (num2.length() - num1.length()); i++) {
+                sb.insert(0, '0');
             }
-            // 进位
-            if (result > 9) {
-                results[i + 1] = 1;
-                result = result % 10;
-            }
-            results[i] = result;
+            num1 = sb.toString();
         }
         StringBuilder sb = new StringBuilder();
-        boolean flag = true;
-        for (int i = results.length - 1; i >= 0; i--) {
-            if (flag && results[i] == 0) {
-                continue;
+        int last = 0;
+        for (int i = num1.length() - 1; i >= 0; i--) {
+            int digit1 = Character.digit(num1.charAt(i), 10);
+            int digit2 = Character.digit(num2.charAt(i), 10);
+            last = last + digit1 + digit2;
+            // 进位
+            if (last > 9) {
+                sb.insert(0, last % 10);
+                last = 1;
+            } else {
+                sb.insert(0, last);
+                last = 0;
             }
-            flag = false;
-            sb.append(results[i]);
         }
-        if (sb.length() == 0) {
-            return "0";
+        if (last > 0) {
+            sb.insert(0, last);
         }
         return sb.toString();
     }
@@ -361,16 +356,16 @@ public class Simple {
                 sb.append(s.charAt(i));
             } else {
                 char last = sb.charAt(sb.length() - 1);
-                if (last >= 'a' && last <= 'z') {
+                if (Character.isLowerCase(last)) {
                     // 是小写字母
-                    if ((s.charAt(i) - 'A') == (last - 'a')) {
+                    if ((s.charAt(i)) == (Character.toUpperCase(last))) {
                         sb.delete(sb.length() - 1, sb.length());
                     } else {
                         sb.append(s.charAt(i));
                     }
                 } else {
                     // 是大写字母
-                    if ((last - 'A') == (s.charAt(i) - 'a')) {
+                    if (Character.toLowerCase(last) == (s.charAt(i))) {
                         sb.delete(sb.length() - 1, sb.length());
                     } else {
                         sb.append(s.charAt(i));
