@@ -1,8 +1,6 @@
 package simple.tree;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Simple {
     public static void main(String[] args) {
@@ -168,6 +166,40 @@ public class Simple {
             return root.val == targetSum;
         }
         return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val);
+    }
+
+    /**
+     * 将有序数组转换为二叉搜索树：给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
+     * 高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null || nums.length <= 0) {
+            return null;
+        }
+        int mid = nums.length >>> 1;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = sortedArrayToBST(Arrays.copyOfRange(nums, 0, mid));
+        if (mid + 1 < nums.length) {
+            root.right = sortedArrayToBST(Arrays.copyOfRange(nums, mid + 1, nums.length));
+        } else {
+            root.right = null;
+        }
+        return root;
+    }
+
+    /**
+     * 高度平衡二叉树：给定一个二叉树，判断它是否是高度平衡的二叉树。
+     * 高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+     */
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        int abs = Math.abs(maxDepth(root.left) - maxDepth(root.right));
+        if (abs > 1) {
+            return false;
+        }
+        return isBalanced(root.left) && isBalanced(root.right);
     }
 
 }

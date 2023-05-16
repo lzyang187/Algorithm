@@ -19,7 +19,8 @@ public class Simple {
 //        System.out.println(majorityElement(new int[]{3, 3, 4}));
 //        System.out.println(containsNearbyDuplicate(new int[]{1, 0, 1, 1}, 1));
 //        System.out.println(luckyNumbers(new int[][]{{3, 6}, {7, 1}, {5, 2}, {4, 8}}));
-        printNumbersMax(10);
+//        printNumbersMax(10);
+        System.out.println(generate(4));
     }
 
     /**
@@ -438,6 +439,38 @@ public class Simple {
                 list.add(matrix[row][colMinIndex]);
                 colSet.add(colMinIndex);
             }
+        }
+        return list;
+    }
+
+    /**
+     * 杨辉三角：给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
+     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+     */
+    public static List<List<Integer>> generate(int numRows) {
+        if (numRows <= 0) {
+            return null;
+        }
+        List<List<Integer>> list = new ArrayList<>();
+        for (int row = 1; row <= numRows; row++) {
+            List<Integer> sub = new ArrayList<>();
+            if (row == 1) {
+                sub.add(1);
+            } else {
+                // 上一行的list
+                List<Integer> last = list.get(row - 2);
+                for (int i = 0; i < row; i++) {
+                    int result = 0;
+                    if (i - 1 >= 0) {
+                        result += last.get(i - 1);
+                    }
+                    if (i < last.size()) {
+                        result += last.get(i);
+                    }
+                    sub.add(result);
+                }
+            }
+            list.add(sub);
         }
         return list;
     }
