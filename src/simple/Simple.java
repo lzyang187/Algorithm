@@ -75,6 +75,7 @@ public class Simple {
 //        System.out.println(listNode);
 
 //        System.out.println(mySqrt(2147395599));
+        System.out.println(isUgly(60));
     }
 
     /**
@@ -193,6 +194,26 @@ public class Simple {
                 return mid;
             }
         }
+    }
+
+    /**
+     * 丑数：丑数（比如6） 就是只包含质因数 2、3 和 5 的正整数。给你一个整数 n ，请你判断 n 是否为 丑数 。如果是，返回 true ；否则，返回 false 。
+     * 1 没有质因数，因此它的全部质因数是 {2, 3, 5} 的空集。习惯上将其视作第一个丑数。
+     * 14 不是丑数，因为它包含了另外一个质因数 7 。
+     */
+    public static boolean isUgly(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        int[] factors = new int[]{2, 3, 5};
+        for (int i = 0; i < factors.length; i++) {
+            if (n % factors[i] == 0) {
+                n /= factors[i];
+                // 重新从头开始
+                i = -1;
+            }
+        }
+        return n == 1;
     }
 
 }
