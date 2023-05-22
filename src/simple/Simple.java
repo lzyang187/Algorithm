@@ -3,6 +3,9 @@ package simple;
 import simple.linklist.ListNode;
 import simple.tree.TreeNode;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author: cyli8
  * @date: 2021-12-19 16:07
@@ -73,9 +76,9 @@ public class Simple {
 
 //        ListNode listNode = removeNthFromEnd(third, 1);
 //        System.out.println(listNode);
-
 //        System.out.println(mySqrt(2147395599));
-        System.out.println(isUgly(60));
+//        System.out.println(isUgly(60));
+//        System.out.println(isHappy(19));
     }
 
     /**
@@ -148,26 +151,6 @@ public class Simple {
     }
 
     /**
-     * 数值的整数次方
-     */
-    public static double myPow(double x, int n) {
-        if (x == 0) {
-            return 0;
-        } else if (x == 1 || n == 0) {
-            return 1;
-        }
-        int absN = Math.abs(n);
-        double result = 1.0;
-        for (int i = 0; i < absN; i++) {
-            result *= x;
-        }
-        if (n < 0) {
-            return 1 / result;
-        }
-        return result;
-    }
-
-    /**
      * x的平方根：给你一个非负整数 x ，计算并返回 x 的 算术平方根。由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
      * 注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。
      */
@@ -214,6 +197,77 @@ public class Simple {
             }
         }
         return n == 1;
+    }
+
+    /**
+     * 3 的幂：给定一个整数，写一个函数来判断它是否是 3的幂次方。如果是，返回 true ；否则，返回 false 。
+     * 整数 n 是 3 的幂次方需满足：存在整数 x 使得 n == 3x
+     */
+    public static boolean isPowerOfThree(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        while (n != 1) {
+            if (n % 3 == 0) {
+                n /= 3;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 4的幂：给定一个整数，写一个函数来判断它是否是 4 的幂次方。如果是，返回 true ；否则，返回 false 。
+     * 整数 n 是 4 的幂次方需满足：存在整数 x 使得 n == 4x
+     */
+    public boolean isPowerOfFour(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        while (n != 1) {
+            if (n % 4 == 0) {
+                n /= 4;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 快乐数：「快乐数」定义为：
+     * 对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。
+     * 然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。
+     * 如果这个过程 结果为1，那么这个数就是快乐数。
+     */
+    public static boolean isHappy(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        Set<Integer> set = new HashSet<>();
+        set.add(n);
+        while (n != 1) {
+            n = getHappyNext(n);
+            if (set.contains(n)) {
+                // 如果不是快乐数，最终会得到已经计算过的数
+                return false;
+            } else {
+                set.add(n);
+            }
+        }
+        return true;
+    }
+
+    private static int getHappyNext(int n) {
+        int result = 0;
+        while (n >= 10) {
+            int num = n % 10;
+            result += num * num;
+            n = n / 10;
+        }
+        result += n * n;
+        return result;
     }
 
 }

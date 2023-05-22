@@ -20,7 +20,8 @@ public class Simple {
 //        System.out.println(containsNearbyDuplicate(new int[]{1, 0, 1, 1}, 1));
 //        System.out.println(luckyNumbers(new int[][]{{3, 6}, {7, 1}, {5, 2}, {4, 8}}));
 //        printNumbersMax(10);
-        System.out.println(generate(4));
+//        System.out.println(generate(4));
+//        System.out.println(missingNumber(new int[]{0, 2}));
     }
 
     /**
@@ -473,6 +474,118 @@ public class Simple {
             list.add(sub);
         }
         return list;
+    }
+
+    /**
+     * 丢失的数字；给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。
+     */
+    public static int missingNumber(int[] nums) {
+        if (nums == null) {
+            throw new NullPointerException("数组为空");
+        }
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i <= nums.length; i++) {
+            set.add(i);
+        }
+        for (int i = 0; i < nums.length; i++) {
+            set.remove(nums[i]);
+        }
+        return set.iterator().next();
+    }
+
+    /**
+     * 两个数组的交集：给定两个数组 nums1 和 nums2 ，返回 它们的交集 。输出结果中的每个元素一定是 唯一 的。我们可以 不考虑输出结果的顺序 。
+     */
+    public int[] intersection(int[] nums1, int[] nums2) {
+        if (nums1 == null || nums1.length <= 0 || nums2 == null || nums2.length <= 0) {
+            return null;
+        }
+        Set<Integer> set = new HashSet<>();
+        for (int i : nums1) {
+            set.add(i);
+        }
+        Set<Integer> result = new HashSet<>();
+        for (int i : nums2) {
+            if (set.contains(i)) {
+                result.add(i);
+            }
+        }
+        int[] results = new int[result.size()];
+        int i = 0;
+        for (Integer integer : result) {
+            results[i] = integer;
+            i++;
+        }
+        return results;
+    }
+
+    /**
+     * 两个数组的交集 II：给你两个整数数组nums1 和 nums2 ，请你以数组形式返回两数组的交集。
+     * 返回结果中每个元素出现的次数，应与元素在两个数组中都出现的次数一致（如果出现次数不一致，则考虑取较小值）。可以不考虑输出结果的顺序。
+     */
+    public int[] intersect(int[] nums1, int[] nums2) {
+        if (nums1 == null || nums1.length <= 0 || nums2 == null || nums2.length <= 0) {
+            return null;
+        }
+        // key是元素，value是key出现的次数
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums1.length; i++) {
+            if (map.containsKey(nums1[i])) {
+                map.put(nums1[i], map.get(nums1[i]) + 1);
+            } else {
+                map.put(nums1[i], 1);
+            }
+        }
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < nums2.length; i++) {
+            if (map.containsKey(nums2[i])) {
+                // 是重复数字
+                if (map.get(nums2[i]) <= 0) {
+                    // 说明num1中此数字的数量少于num2，就不再添加了
+                } else {
+                    list.add(nums2[i]);
+                    map.put(nums2[i], map.get(nums2[i]) - 1);
+                }
+            }
+        }
+        int[] result = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+        return result;
+    }
+
+    /**
+     * 移动零：给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+     * 请注意 ，必须在不复制数组的情况下原地对数组进行操作。
+     */
+    public void moveZeroes(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return;
+        }
+        // 非0元素放在前count位
+        int count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                nums[count] = nums[i];
+                count++;
+            }
+        }
+        // 将count后的元素设置为0
+        for (int i = count; i < nums.length; i++) {
+            nums[i] = 0;
+        }
+    }
+
+    /**
+     * 最小的k个数：输入整数数组 arr ，找出其中最小的 k 个数。例如，输入4、5、1、6、2、7、3、8这8个数字，则最小的4个数字是1、2、3、4。
+     */
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if (arr == null || arr.length <= 0 || k >= arr.length) {
+            return arr;
+        }
+        Arrays.sort(arr);
+        return Arrays.copyOfRange(arr, 0, k);
     }
 
 }
