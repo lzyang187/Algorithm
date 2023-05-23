@@ -22,6 +22,8 @@ public class Simple {
 //        printNumbersMax(10);
 //        System.out.println(generate(4));
 //        System.out.println(missingNumber(new int[]{0, 2}));
+
+        System.out.println(Arrays.toString(getLeastNumbersQuick(new int[]{0, 0, 0, 2, 0, 5}, 0)));
     }
 
     /**
@@ -357,8 +359,31 @@ public class Simple {
         // 先排序
         Arrays.sort(nums);
         // 中间的那个数就是多数元素
-        return nums[(nums.length - 1) >>> 1];
+        return nums[(nums.length) >>> 1];
     }
+
+    /**
+     * 多数元素：基于Partition函数时间复杂度为O(n)的算法。判断一轮快速排序后的下标是否是n/2
+     */
+    public static int majorityElementQuick(int[] nums) {
+        if (nums == null || nums.length <= 0) {
+            throw new IllegalArgumentException("参数不合法");
+        }
+        int targetIndex = nums.length >>> 1;
+        int left = 0;
+        int right = nums.length - 1;
+        int partition = simple.sort.Simple.partition(nums, left, right);
+        while (partition != targetIndex) {
+            if (partition < targetIndex) {
+                left = partition + 1;
+            } else {
+                right = partition - 1;
+            }
+            partition = simple.sort.Simple.partition(nums, left, right);
+        }
+        return nums[targetIndex];
+    }
+
 
     /**
      * 存在重复元素：给你一个整数数组 nums 。如果任一值在数组中出现 至少两次 ，返回 true ；如果数组中每个元素互不相同，返回 false 。
@@ -585,6 +610,32 @@ public class Simple {
             return arr;
         }
         Arrays.sort(arr);
+        return Arrays.copyOfRange(arr, 0, k);
+    }
+
+    /**
+     * 最小的k个数：基于Partition函数时间复杂度为O(n)的算法，判断一轮快速排序后的下标是否是k-1
+     */
+    public static int[] getLeastNumbersQuick(int[] arr, int k) {
+        if (k <= 0) {
+            // 防止走到下面的while循环超时
+            return Arrays.copyOfRange(arr, 0, k);
+        }
+        if (arr == null || arr.length <= 0 || k >= arr.length) {
+            return arr;
+        }
+        int targetIndex = k - 1;
+        int left = 0;
+        int right = arr.length - 1;
+        int partition = simple.sort.Simple.partition(arr, left, right);
+        while (partition != targetIndex) {
+            if (partition < targetIndex) {
+                left = partition + 1;
+            } else {
+                right = partition - 1;
+            }
+            partition = simple.sort.Simple.partition(arr, left, right);
+        }
         return Arrays.copyOfRange(arr, 0, k);
     }
 

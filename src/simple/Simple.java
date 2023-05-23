@@ -188,15 +188,33 @@ public class Simple {
         if (n <= 0) {
             return false;
         }
-        int[] factors = new int[]{2, 3, 5};
-        for (int i = 0; i < factors.length; i++) {
-            if (n % factors[i] == 0) {
-                n /= factors[i];
-                // 重新从头开始
-                i = -1;
-            }
+        while (n % 2 == 0) {
+            n = n >>> 1;
+        }
+        while (n % 3 == 0) {
+            n /= 3;
+        }
+        while (n % 5 == 0) {
+            n /= 5;
         }
         return n == 1;
+    }
+
+    /**
+     * 丑数：求按从小到大的顺序的第 n 个丑数。习惯上我们把1当作第一个丑数。时间效率低，不是丑数的也进行了计算
+     */
+    public int nthUglyNumber(int n) {
+        int count = 0;
+        int number = 1;
+        while (true) {
+            if (isUgly(number)) {
+                count++;
+            }
+            if (count == n) {
+                return number;
+            }
+            number++;
+        }
     }
 
     /**

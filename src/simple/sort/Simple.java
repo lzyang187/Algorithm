@@ -1,19 +1,36 @@
 package simple.sort;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Simple {
     public static void main(String[] args) {
-        int[] ints = {2, 3, 5, 11, 28, 1, 6, 1, 2};
+        int[] ints = new int[100000];
+        Random random = new Random();
+        for (int i = 0; i < ints.length; i++) {
+            ints[i] = random.nextInt(10000);
+        }
+//        System.out.println(Arrays.toString(ints));
+        int[] copy = Arrays.copyOfRange(ints, 0, ints.length);
+        int[] copy1 = Arrays.copyOfRange(ints, 0, ints.length);
+//        int[] ints = {2, 3, 5, 11, 28, 1, 6, 1, 2};
 //        bubble(ints);
-        quick(ints, 0, ints.length - 1);
-        System.out.println(Arrays.toString(ints));
+//        System.out.println(Arrays.toString(ints));
+        long start = System.currentTimeMillis();
+        quick(copy, 0, copy.length - 1);
+        System.out.println("quick用时：" + (System.currentTimeMillis() - start));
+//        System.out.println(Arrays.toString(copy));
+
+        long start1 = System.currentTimeMillis();
+        Arrays.sort(copy1);
+        System.out.println("系统的quick用时：" + (System.currentTimeMillis() - start1));
     }
 
     /**
      * 冒泡排序：通过一趟排序将最大的数排到最后
      */
     public static void bubble(int[] nums) {
+        long start = System.currentTimeMillis();
         if (nums == null || nums.length <= 1) {
             return;
         }
@@ -27,6 +44,7 @@ public class Simple {
                 }
             }
         }
+        System.out.println("bubble用时：" + (System.currentTimeMillis() - start));
     }
 
     /**
@@ -37,13 +55,27 @@ public class Simple {
         if (l >= r || nums == null || nums.length <= 1) {
             return;
         }
+        int partition = partition(nums, l, r);
+        // 递归排序左半部分
+        quick(nums, l, partition - 1);
+        // 递归排序右半部分
+        quick(nums, partition + 1, r);
+    }
+
+    /**
+     * 一趟快速排序
+     */
+    public static int partition(int[] nums, int l, int r) {
+        if (nums == null || nums.length <= 0 || l > r) {
+            throw new IllegalArgumentException("参数错误");
+        }
         int i = l;
         int j = r;
         // 选第一个数作为基准值
         int x = nums[i];
         while (i < j) {
             // 从右向左找小于x的值
-            while (j > i && nums[j] > x) {
+            while (j > i && nums[j] >= x) {
                 j--;
             }
             if (i < j) {
@@ -59,9 +91,8 @@ public class Simple {
                 j--;
             }
         }
+        // 将基准值放入i位置
         nums[i] = x;
-        // 递归排序左半部分
-        quick(nums, l, i - 1);
-        quick(nums, i + 1, r);
+        return i;
     }
 }
