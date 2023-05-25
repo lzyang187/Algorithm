@@ -8,8 +8,10 @@ import java.util.List;
 public class Medium {
     public static void main(String[] args) {
 //        System.out.println(minSetSize(new int[]{3, 3, 3, 3, 5, 5, 5, 2, 2, 7}));
-//        System.out.println(searchMatrix(new int[][]{{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}}, 1));
-        System.out.println(maxSubArray(new int[]{-1, 0, -2}));
+        int[][] matrix = {{1, 3, 5, 7}, {10, 11, 16, 20}, {23, 30, 34, 60}};
+        System.out.println(searchMatrix(matrix, 1));
+//        System.out.println(maxSubArray(new int[]{-1, 0, -2}));
+        System.out.println(maxValue(matrix));
     }
 
     /**
@@ -171,6 +173,39 @@ public class Medium {
             }
         }
         return lastMax;
+    }
+
+    /**
+     * 礼物的最大价值：在一个 m*n 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于 0）。你可以从棋盘的左上角开始拿格子里的礼物，
+     * 并每次向右或者向下移动一格、直到到达棋盘的右下角。给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
+     * 动态规划的经典题目
+     */
+    public static int maxValue(int[][] grid) {
+        if (grid == null || grid.length <= 0 || grid[0].length <= 0) {
+            return 0;
+        }
+        // 以空间换时间，用二维数组优化时间效率。
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] maxValue = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 && j == 0) {
+                    maxValue[i][j] = grid[i][j];
+                } else {
+                    int left = 0;
+                    if (j > 0) {
+                        left = maxValue[i][j - 1];
+                    }
+                    int up = 0;
+                    if (i > 0) {
+                        up = maxValue[i - 1][j];
+                    }
+                    maxValue[i][j] = grid[i][j] + Math.max(left, up);
+                }
+            }
+        }
+        return maxValue[m - 1][n - 1];
     }
 
 }

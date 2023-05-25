@@ -23,7 +23,8 @@ public class Simple {
 //        System.out.println(generate(4));
 //        System.out.println(missingNumber(new int[]{0, 2}));
 
-        System.out.println(Arrays.toString(getLeastNumbersQuick(new int[]{0, 0, 0, 2, 0, 5}, 0)));
+//        System.out.println(Arrays.toString(getLeastNumbersQuick(new int[]{0, 0, 0, 2, 0, 5}, 0)));
+        System.out.println(thirdMax(new int[]{1, 2, 3, 9}));
     }
 
     /**
@@ -502,6 +503,38 @@ public class Simple {
     }
 
     /**
+     * 杨辉三角 II：给定一个非负索引 rowIndex，返回「杨辉三角」的第 rowIndex 行。
+     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+     */
+    public List<Integer> getRow(int rowIndex) {
+        if (rowIndex < 0) {
+            return null;
+        }
+        List<Integer> lastList = new ArrayList<>();
+        List<Integer> curList = new ArrayList<>();
+        for (int i = 0; i <= rowIndex; i++) {
+            if (i == 0) {
+                lastList.add(1);
+                curList.add(1);
+            } else {
+                lastList = curList;
+                curList = new ArrayList<>();
+                for (int j = 0; j < (i + 1); j++) {
+                    int digit = 0;
+                    if (j - 1 >= 0) {
+                        digit += lastList.get(j - 1);
+                    }
+                    if (j < lastList.size()) {
+                        digit += lastList.get(j);
+                    }
+                    curList.add(digit);
+                }
+            }
+        }
+        return curList;
+    }
+
+    /**
      * 丢失的数字；给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。
      */
     public static int missingNumber(int[] nums) {
@@ -637,6 +670,71 @@ public class Simple {
             partition = simple.sort.Simple.partition(arr, left, right);
         }
         return Arrays.copyOfRange(arr, 0, k);
+    }
+
+    /**
+     * 第三大的数：给你一个非空数组，返回此数组中 第三大的数 。如果不存在，则返回数组中最大的数。
+     * 注意，要求返回第三大的数，是指在所有不同数字中排第三大的数。
+     */
+    public static int thirdMax(int[] nums) {
+        if (nums == null || nums.length <= 0) {
+            throw new NullPointerException("nums为空");
+        }
+        TreeSet<Integer> set = new TreeSet<>();
+        for (int num : nums) {
+            set.add(num);
+            if (set.size() > 3) {
+                set.pollFirst();
+            }
+        }
+        if (set.size() == 3) {
+            return set.first();
+        } else {
+            return set.last();
+        }
+    }
+
+    /**
+     * 在排序数组中查找数字 I：统计一个数字在排序数组中出现的次数。
+     */
+    public int search(int[] nums, int target) {
+        if (nums == null || nums.length <= 0) {
+            return 0;
+        }
+        int left = 0;
+        int right = nums.length - 1;
+        int mid = 0;
+        while (left <= right) {
+            mid = (left + right) >>> 1;
+            if (nums[mid] == target) {
+                break;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        int count = 0;
+        if (nums[mid] == target) {
+            count++;
+            // 向左查找
+            int index = mid - 1;
+            while (index >= 0) {
+                if (nums[index] == target) {
+                    count++;
+                }
+                index--;
+            }
+            // 向右查找
+            index = mid + 1;
+            while (index < nums.length) {
+                if (nums[index] == target) {
+                    count++;
+                }
+                index++;
+            }
+        }
+        return count;
     }
 
 }

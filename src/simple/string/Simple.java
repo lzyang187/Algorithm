@@ -1,11 +1,15 @@
 package simple.string;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class Simple {
     public static void main(String[] args) {
 //        System.out.println(romanToInt("IX"));
 //        System.out.println(longestCommonPrefix(new String[]{"flower", "flow", "flight"}));
 //        System.out.println(addBinary("0", "0"));
-        System.out.println(addStrings("0", "0"));
+//        System.out.println(addStrings("0", "0"));
 //        System.out.println(lengthOfLastWord("a bb d   "));
 //        System.out.println(isPalindrome("A man, a plan, a canal: Panama"));
 //        System.out.println(convertToExcelTitle(53));
@@ -17,7 +21,9 @@ public class Simple {
 //        }
 //        System.out.println(isPalindromeDigit(-121));
 //        System.out.println(backspaceCompare("ab#cd", "ad#c"));
-        System.out.println(makeGood("aAbbbCcDd"));
+//        System.out.println(makeGood("aAbbbCcDd"));
+//        System.out.println(isIsomorphic("badc", "baba"));
+        System.out.println(repeatedSubstringPattern("babbabbabbabbabbac"));
     }
 
     /**
@@ -374,6 +380,104 @@ public class Simple {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 同构字符串：给定两个字符串s和t，判断它们是否是同构的。
+     * 如果s中的字符可以按某种映射关系替换得到t，那么这两个字符串是同构的。
+     * 每个出现的字符都应当映射到另一个字符，同时不改变字符的顺序。不同字符不能映射到同一个字符上，相同字符只能映射到同一个字符上，字符可以映射到自己本身。
+     */
+    public static boolean isIsomorphic(String s, String t) {
+        if (s == null || t == null) {
+            throw new NullPointerException("参数为空");
+        }
+        if (s.length() != t.length()) {
+            return false;
+        }
+        Map<Character, Character> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (map.containsKey(s.charAt(i))) {
+                if (map.get(s.charAt(i)) != t.charAt(i)) {
+                    return false;
+                }
+            } else {
+                if (map.containsValue(t.charAt(i))) {
+                    // 说明不同字符映射到相同字符了
+                    return false;
+                }
+                map.put(s.charAt(i), t.charAt(i));
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 重复的子字符串：给定一个非空的字符串 s ，检查是否可以通过由它的一个子串重复多次构成。
+     */
+    public static boolean repeatedSubstringPattern(String s) {
+        if (s == null || s.length() <= 0) {
+            throw new NullPointerException("参数为空");
+        }
+        int len = 1;
+        int mid = s.length() >>> 1;
+        while (len <= mid) {
+            String sub = s.substring(0, len);
+            if (s.length() % sub.length() == 0) {
+                // s的长度是sub长度的整数倍
+                int i;
+                for (i = len; i < s.length(); i += len) {
+                    if (!sub.equals(s.substring(i, i + len))) {
+                        break;
+                    }
+                }
+                if (i == s.length()) {
+                    return true;
+                }
+            }
+            len++;
+        }
+        return false;
+    }
+
+    /**
+     * 第一个只出现一次的字符：在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母。
+     * 复杂度为O(n ^ 2)
+     */
+    public static char firstUniqChar(String s) {
+        if (s == null || s.length() <= 0) {
+            return ' ';
+        }
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (s.substring(0, i).indexOf(c) < 0 && s.substring(i + 1).indexOf(c) < 0) {
+                return c;
+            }
+        }
+        return ' ';
+    }
+
+    /**
+     * 第一个只出现一次的字符：在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母。
+     */
+    public static char firstUniqCharQuick(String s) {
+        if (s == null || s.length() <= 0) {
+            return ' ';
+        }
+        LinkedHashMap<Character, Integer> map = new LinkedHashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (map.containsKey(c)) {
+                map.put(c, map.get(c) + 1);
+            } else {
+                map.put(c, 1);
+            }
+        }
+        for (Map.Entry<Character, Integer> characterIntegerEntry : map.entrySet()) {
+            if (characterIntegerEntry.getValue() == 1) {
+                return characterIntegerEntry.getKey();
+            }
+        }
+        return ' ';
     }
 
 }
