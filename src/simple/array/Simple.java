@@ -24,7 +24,8 @@ public class Simple {
 //        System.out.println(missingNumber(new int[]{0, 2}));
 
 //        System.out.println(Arrays.toString(getLeastNumbersQuick(new int[]{0, 0, 0, 2, 0, 5}, 0)));
-        System.out.println(thirdMax(new int[]{1, 2, 3, 9}));
+//        System.out.println(thirdMax(new int[]{1, 2, 3, 9}));
+        System.out.println(Arrays.deepToString(findContinuousSequence(9)));
     }
 
     /**
@@ -735,6 +736,67 @@ public class Simple {
             }
         }
         return count;
+    }
+
+    /**
+     * 和为s的两个数字：输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+     */
+    public int[] twoSum(int[] nums, int target) {
+        if (nums == null || nums.length <= 0) {
+            return null;
+        }
+        int left = 0;
+        int right = nums.length - 1;
+        while (left < right) {
+            int result = nums[left] + nums[right];
+            if (result == target) {
+                return new int[]{nums[left], nums[right]};
+            } else if (result < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 和为s的连续正数序列：输入一个正整数 target ，输出所有和为 target 的连续正整数序列（至少含有两个数）。
+     * 序列内的数字由小到大排列，不同序列按照首个数字从小到大排列。
+     */
+    public static int[][] findContinuousSequence(int target) {
+        if (target <= 2) {
+            return null;
+        }
+        int small = 1;
+        int large = 2;
+        int maxLarge = (target + 1) >>> 1;
+        List<int[]> list = new ArrayList<>();
+        int subMaxCount = 0;
+        while (small < large && large <= maxLarge) {
+            int count = 0;
+            for (int i = small; i <= large; i++) {
+                count += i;
+            }
+            if (count == target) {
+                int[] sub = new int[large - small + 1];
+                for (int i = small; i <= large; i++) {
+                    sub[i - small] = i;
+                }
+                subMaxCount = Math.max(subMaxCount, sub.length);
+                list.add(sub);
+                large++;
+            } else if (count > target) {
+                small++;
+            } else {
+                large++;
+            }
+        }
+        int[][] result = new int[list.size()][subMaxCount];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+        return result;
     }
 
 }

@@ -1,6 +1,9 @@
 package simple.tree;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
 
 public class Simple {
     public static void main(String[] args) {
@@ -200,6 +203,28 @@ public class Simple {
             return false;
         }
         return isBalanced(root.left) && isBalanced(root.right);
+    }
+
+    /**
+     * 二叉搜索树的第k大节点：给定一棵二叉搜索树，请找出其中第 k 大的节点的值。
+     */
+    public int kthLargest(TreeNode root, int k) {
+        if (root == null) {
+            throw new NullPointerException("参数为空");
+        }
+        // 先处理根和右子树
+        List<Integer> rightList = inorderTraversal(root.right);
+        rightList.add(0, root.val);
+        if (rightList.size() >= k) {
+            return rightList.get(rightList.size() - k);
+        }
+        // 再处理左子树
+        List<Integer> leftList = inorderTraversal(root.left);
+        rightList.addAll(0, leftList);
+        if (rightList.size() >= k) {
+            return rightList.get(rightList.size() - k);
+        }
+        throw new IllegalArgumentException("k比节点数小");
     }
 
 }

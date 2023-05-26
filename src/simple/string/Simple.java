@@ -23,7 +23,9 @@ public class Simple {
 //        System.out.println(backspaceCompare("ab#cd", "ad#c"));
 //        System.out.println(makeGood("aAbbbCcDd"));
 //        System.out.println(isIsomorphic("badc", "baba"));
-        System.out.println(repeatedSubstringPattern("babbabbabbabbabbac"));
+//        System.out.println(repeatedSubstringPattern("babbabbabbabbabbac"));
+//        System.out.println(reverseWords(" "));
+        System.out.println(reverseLeftWords("abcdefg", 2));
     }
 
     /**
@@ -478,6 +480,40 @@ public class Simple {
             }
         }
         return ' ';
+    }
+
+    /**
+     * 翻转单词顺序：输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。
+     * 例如输入字符串"I am a student. "，则输出"student. a am I"。
+     * 注意：输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括；如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
+     */
+    public static String reverseWords(String s) {
+        if (s == null || s.length() <= 0) {
+            return s;
+        }
+        String[] split = s.trim().split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (int i = split.length - 1; i >= 0; i--) {
+            if (split[i].trim().isEmpty()) {
+                continue;
+            }
+            sb.append(split[i].trim());
+            if (i > 0) {
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 左旋转字符串：字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。
+     * 比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
+     */
+    public static String reverseLeftWords(String s, int n) {
+        if (s == null || s.length() <= n) {
+            return s;
+        }
+        return s.substring(n) + s.substring(0, n);
     }
 
 }
