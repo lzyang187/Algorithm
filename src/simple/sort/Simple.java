@@ -13,9 +13,10 @@ public class Simple {
 //        System.out.println(Arrays.toString(ints));
         int[] copy = Arrays.copyOfRange(ints, 0, ints.length);
         int[] copy1 = Arrays.copyOfRange(ints, 0, ints.length);
-//        int[] ints = {2, 3, 5, 11, 28, 1, 6, 1, 2};
+        int[] nums = {2, 3, 5, 11, 28, 1, 6, 1, 2};
 //        bubble(ints);
-//        System.out.println(Arrays.toString(ints));
+        insertSort(nums);
+        System.out.println("insertSort：" + Arrays.toString(nums));
         long start = System.currentTimeMillis();
         quick(copy, 0, copy.length - 1);
         System.out.println("quick用时：" + (System.currentTimeMillis() - start));
@@ -95,4 +96,27 @@ public class Simple {
         nums[i] = x;
         return i;
     }
+
+    /**
+     * 直接插入排序
+     */
+    public static void insertSort(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return;
+        }
+        for (int i = 1; i < nums.length; i++) {
+            int iValue = nums[i];
+            for (int j = i - 1; j >= -1; j--) {
+                if (j == -1 || iValue > nums[j]) {
+                    // 找到了插入位置：j+1
+                    nums[j + 1] = iValue;
+                    break;
+                } else {
+                    // j位置的数往后移1位
+                    nums[j + 1] = nums[j];
+                }
+            }
+        }
+    }
+
 }
