@@ -2,7 +2,8 @@ package simple;
 
 public class Medium {
     public static void main(String[] args) {
-        System.out.println(myPow(2.00000, -2147483648));
+//        System.out.println(myPow(2.00000, -2147483648));
+        System.out.println(myPowQuick(2.00000, -2147483648));
     }
 
     /**
@@ -18,6 +19,25 @@ public class Medium {
         double result = 1.0;
         for (int i = 0; i < absN; i++) {
             result *= x;
+        }
+        if (n < 0) {
+            return 1 / result;
+        }
+        return result;
+    }
+
+    public static double myPowQuick(double x, int n) {
+        if (x == 0) {
+            return 0;
+        } else if (x == 1 || n == 0) {
+            return 1;
+        }
+        long absN = Math.abs((long) n);
+        double half = myPowQuick(x, (int) (absN >>> 1));
+        double result = half * half;
+        if ((absN & 1) == 1) {
+            // 奇数
+            result = result * x;
         }
         if (n < 0) {
             return 1 / result;

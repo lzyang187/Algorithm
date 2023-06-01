@@ -79,6 +79,7 @@ public class Simple {
 //        System.out.println(mySqrt(2147395599));
 //        System.out.println(isUgly(60));
 //        System.out.println(isHappy(19));
+        System.out.println(nthUglyNumber(10));
     }
 
     /**
@@ -201,20 +202,34 @@ public class Simple {
     }
 
     /**
-     * 丑数：求按从小到大的顺序的第 n 个丑数。习惯上我们把1当作第一个丑数。时间效率低，不是丑数的也进行了计算
+     * 丑数：求按从小到大的顺序的第 n 个丑数。习惯上我们把1当作第一个丑数。
      */
-    public int nthUglyNumber(int n) {
-        int count = 0;
-        int number = 1;
-        while (true) {
-            if (isUgly(number)) {
-                count++;
-            }
-            if (count == n) {
-                return number;
-            }
-            number++;
+    public static int nthUglyNumber(int n) {
+        if (n <= 1) {
+            return 1;
         }
+        int[] array = new int[n];
+        array[0] = 1;
+        int i2 = 0;
+        int i3 = 0;
+        int i5 = 0;
+        for (int i = 1; i < array.length; i++) {
+            int next2 = array[i2] * 2;
+            int next3 = array[i3] * 3;
+            int next5 = array[i5] * 5;
+            int min = Math.min(Math.min(next2, next3), next5);
+            array[i] = min;
+            if (next2 == min) {
+                i2++;
+            }
+            if (next3 == min) {
+                i3++;
+            }
+            if (next5 == min) {
+                i5++;
+            }
+        }
+        return array[n - 1];
     }
 
     /**
