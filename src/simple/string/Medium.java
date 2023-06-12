@@ -1,8 +1,14 @@
 package simple.string;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Medium {
     public static void main(String[] args) {
-        System.out.println(lengthOfLongestSubstring("dvdf"));
+//        System.out.println(lengthOfLongestSubstring("dvdf"));
+        long time = System.currentTimeMillis();
+        System.out.println(longestPalindrome("zudfweormatjycujjirzjpyrmaxurectxrtqedmmgergwdvjmjtstdhcihacqnothgttgqfywcpgnuvwglvfiuxteopoyizgehkwuvvkqxbnufkcbodlhdmbqyghkojrgokpwdhtdrwmvdegwycecrgjvuexlguayzcammupgeskrvpthrmwqaqsdcgycdupykppiyhwzwcplivjnnvwhqkkxildtyjltklcokcrgqnnwzzeuqioyahqpuskkpbxhvzvqyhlegmoviogzwuiqahiouhnecjwysmtarjjdjqdrkljawzasriouuiqkcwwqsxifbndjmyprdozhwaoibpqrthpcjphgsfbeqrqqoqiqqdicvybzxhklehzzapbvcyleljawowluqgxxwlrymzojshlwkmzwpixgfjljkmwdtjeabgyrpbqyyykmoaqdambpkyyvukalbrzoyoufjqeftniddsfqnilxlplselqatdgjziphvrbokofvuerpsvqmzakbyzxtxvyanvjpfyvyiivqusfrsufjanmfibgrkwtiuoykiavpbqeyfsuteuxxjiyxvlvgmehycdvxdorpepmsinvmyzeqeiikajopqedyopirmhymozernxzaueljjrhcsofwyddkpnvcvzixdjknikyhzmstvbducjcoyoeoaqruuewclzqqqxzpgykrkygxnmlsrjudoaejxkipkgmcoqtxhelvsizgdwdyjwuumazxfstoaxeqqxoqezakdqjwpkrbldpcbbxexquqrznavcrprnydufsidakvrpuzgfisdxreldbqfizngtrilnbqboxwmwienlkmmiuifrvytukcqcpeqdwwucymgvyrektsnfijdcdoawbcwkkjkqwzffnuqituihjaklvthulmcjrhqcyzvekzqlxgddjoir"));
+        System.out.println(System.currentTimeMillis() - time);
     }
 
     /**
@@ -25,6 +31,73 @@ public class Medium {
         }
         maxLength = Math.max(maxLength, sb.length());
         return maxLength;
+    }
+
+    /**
+     * 最长回文子串：给你一个字符串 s，找到 s 中最长的回文子串。
+     * 如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。
+     */
+    public static String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) {
+            return null;
+        }
+        if (isPalindromeStr(s)) {
+            return s;
+        } else {
+            Map<String, String> map = new HashMap<>();
+            return longestPalindrome(s, map);
+        }
+    }
+
+    public static String longestPalindrome(String s, Map<String, String> map) {
+        if (s == null || s.length() < 1) {
+            return null;
+        }
+        if (isPalindromeStr(s)) {
+            return s;
+        } else {
+            String head = s.substring(0, s.length() - 1);
+            String tail = s.substring(1);
+            String headP;
+            if (map.containsKey(head)) {
+                headP = map.get(head);
+            } else {
+                headP = longestPalindrome(head, map);
+                map.put(head, headP);
+            }
+            String tailP;
+            if (map.containsKey(tail)) {
+                tailP = map.get(tail);
+            } else {
+                tailP = longestPalindrome(tail, map);
+                map.put(tail, tailP);
+            }
+            int headLen = headP != null ? headP.length() : 0;
+            int tailLen = tailP != null ? tailP.length() : 0;
+            if (headLen > tailLen) {
+                return headP;
+            }
+            return tailP;
+        }
+    }
+
+    public static boolean isPalindromeStr(String s) {
+        if (s == null || s.isEmpty()) {
+            return false;
+        }
+        if (s.length() == 1) {
+            return true;
+        }
+        int left = 0;
+        int right = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
 
 }
