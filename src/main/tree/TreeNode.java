@@ -1,4 +1,4 @@
-package simple.tree;
+package main.tree;
 
 /**
  * 二叉树的定义

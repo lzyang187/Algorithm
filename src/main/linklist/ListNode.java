@@ -1,4 +1,4 @@
-package simple.linklist;
+package main.linklist;
 
 /**
  * 单链表的定义

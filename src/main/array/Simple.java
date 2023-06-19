@@ -1,4 +1,4 @@
-package simple.array;
+package main.array;
 
 import java.util.*;
 
@@ -374,14 +374,14 @@ public class Simple {
         int targetIndex = nums.length >>> 1;
         int left = 0;
         int right = nums.length - 1;
-        int partition = simple.sort.Simple.partition(nums, left, right);
+        int partition = main.sort.Simple.partition(nums, left, right);
         while (partition != targetIndex) {
             if (partition < targetIndex) {
                 left = partition + 1;
             } else {
                 right = partition - 1;
             }
-            partition = simple.sort.Simple.partition(nums, left, right);
+            partition = main.sort.Simple.partition(nums, left, right);
         }
         return nums[targetIndex];
     }
@@ -661,14 +661,14 @@ public class Simple {
         int targetIndex = k - 1;
         int left = 0;
         int right = arr.length - 1;
-        int partition = simple.sort.Simple.partition(arr, left, right);
+        int partition = main.sort.Simple.partition(arr, left, right);
         while (partition != targetIndex) {
             if (partition < targetIndex) {
                 left = partition + 1;
             } else {
                 right = partition - 1;
             }
-            partition = simple.sort.Simple.partition(arr, left, right);
+            partition = main.sort.Simple.partition(arr, left, right);
         }
         return Arrays.copyOfRange(arr, 0, k);
     }

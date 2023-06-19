@@ -1,4 +1,4 @@
-package simple.stack;
+package main.stack;
 
 import java.util.Stack;
 

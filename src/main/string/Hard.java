@@ -1,4 +1,4 @@
-package simple.string;
+package main.string;
 
 public class Hard {
     public static void main(String[] args) {

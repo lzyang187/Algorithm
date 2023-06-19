@@ -1,4 +1,4 @@
-package simple.sort;
+package main.sort;
 
 import java.util.Arrays;
 import java.util.Random;
