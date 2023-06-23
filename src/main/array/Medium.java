@@ -208,4 +208,132 @@ public class Medium {
         return maxValue[m - 1][n - 1];
     }
 
+    /**
+     * 矩阵中的路径：给定一个m x n 二维字符网格board 和一个字符串单词word 。如果word 存在于网格中，返回 true ；否则，返回 false 。
+     * 回溯法的典型例子
+     */
+    public boolean existPath(char[][] board, String word) {
+        if (board == null || board.length <= 0 || board[0].length <= 0 || word == null || word.length() <= 0) {
+            return false;
+        }
+        // 是否已经访问过的标记
+        boolean[][] visited = new boolean[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (checkPath(board, visited, i, j, word, 0)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断以网格的(i,j) 位置出发，能否搜索到单词word[k..]，其中word[k..] 表示字符串word 从第k 个字符开始的后缀子串。如果能搜索到，则返回
+     * true，反之返回false。
+     */
+    private boolean checkPath(char[][] board, boolean[][] visited, int i, int j, String word, int k) {
+        if (i < 0 || i >= board.length) {
+            return false;
+        }
+        if (j < 0 || j >= board[0].length) {
+            return false;
+        }
+        if (k < 0 || k >= word.length()) {
+            return false;
+        }
+        if (visited[i][j]) {
+            // 已经被访问过了
+            return false;
+        }
+        if (board[i][j] == word.charAt(k)) {
+            if (k == word.length() - 1) {
+                return true;
+            }
+            // 开始找下一个字符
+            visited[i][j] = true;
+            // 向上一步
+            if (checkPath(board, visited, i - 1, j, word, k + 1)) {
+                return true;
+            }
+            // 向下一步
+            if (checkPath(board, visited, i + 1, j, word, k + 1)) {
+                return true;
+            }
+            // 向左一步
+            if (checkPath(board, visited, i, j - 1, word, k + 1)) {
+                return true;
+            }
+            // 向右一步
+            if (checkPath(board, visited, i, j + 1, word, k + 1)) {
+                return true;
+            }
+            // 上下左右都不满足，则重置这个节点的访问状态
+            visited[i][j] = false;
+        }
+        return false;
+    }
+
+    /**
+     * 机器人的运动范围：地上有一个m行n列的方格，从坐标 [0,0] 到坐标 [m-1,n-1] 。一个机器人从坐标 [0, 0] 的格子开始移动，
+     * 它每次可以向左、右、上、下移动一格（不能移动到方格外），也不能进入行坐标和列坐标的数位之和大于k的格子。
+     * 例如，当k为18时，机器人能够进入方格 [35, 37] ，因为3+5+3+7=18。但它不能进入方格 [35, 38]，因为3+5+3+8=19。请问该机器人能够到达多少个格子？
+     */
+    public int movingCount(int m, int n, int k) {
+        if (m <= 0 || n <= 0 || k < 0) {
+            return 0;
+        }
+        boolean[][] visited = new boolean[m][n];
+        return movingCountCore(m, n, k, visited, 0, 0);
+    }
+
+    /**
+     * 返回从i、j位置开始能移动到的格子数量
+     */
+    private int movingCountCore(int m, int n, int k, boolean[][] visited, int i, int j) {
+        int count = 0;
+        if (checkMove(m, n, k, visited, i, j)) {
+            visited[i][j] = true;
+            // 向上移动
+            int topCount = movingCountCore(m, n, k, visited, i - 1, j);
+            // 向下移动
+            int bottomCount = movingCountCore(m, n, k, visited, i + 1, j);
+            // 向左移动
+            int leftCount = movingCountCore(m, n, k, visited, i, j - 1);
+            // 向右移动
+            int rightCount = movingCountCore(m, n, k, visited, i, j + 1);
+            count = 1 + topCount + bottomCount + leftCount + rightCount;
+        }
+        return count;
+    }
+
+    /**
+     * 判断i、j位置是否满足条件
+     */
+    private boolean checkMove(int m, int n, int k, boolean[][] visited, int i, int j) {
+        if (i < 0 || i >= m) {
+            return false;
+        }
+        if (j < 0 || j >= n) {
+            return false;
+        }
+        // 已经被访问过了
+        if (visited[i][j]) {
+            return false;
+        }
+        return getDigitSum(i) + getDigitSum(j) <= k;
+    }
+
+    /**
+     * 计算数的数位之和
+     */
+    private int getDigitSum(int number) {
+        int sum = 0;
+        while (number > 0) {
+            sum += number % 10;
+            number /= 10;
+        }
+        return sum;
+    }
+
 }

@@ -4,12 +4,19 @@ import java.util.*;
 
 public class Simple {
     public static void main(String[] args) {
-        ListNode head = new ListNode(1);
-        ListNode second = new ListNode(2);
+        ListNode head = new ListNode(4);
+        ListNode second = new ListNode(1);
+        ListNode third = new ListNode(8);
+        ListNode fourth = new ListNode(4);
+        ListNode fifth = new ListNode(5);
         head.next = second;
+        second.next = third;
+        third.next = fourth;
+        fourth.next = fifth;
 //        second = null;
 //        System.out.println(head);
-        System.out.println(deleteNode(head, second));
+//        System.out.println(deleteNode(head, second));
+        System.out.println(getIntersectionNodeOptimize(fourth, head));
     }
 
     /**
@@ -204,6 +211,54 @@ public class Simple {
             curB = curB.next;
         }
         return null;
+    }
+
+    /**
+     * 相交链表：时间复杂度O(n)，空间复杂度O(1)的解法
+     */
+    public static ListNode getIntersectionNodeOptimize(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        // 求A的长度
+        int aLen = 0;
+        ListNode temp = headA;
+        while (temp != null) {
+            aLen++;
+            temp = temp.next;
+        }
+        // 求B的长度
+        int bLen = 0;
+        temp = headB;
+        while (temp != null) {
+            bLen++;
+            temp = temp.next;
+        }
+        ListNode aIndex = headA;
+        ListNode bIndex = headB;
+        // 让长的先移动长度之差
+        if (aLen > bLen) {
+            int count = aLen - bLen;
+            while (count > 0) {
+                aIndex = aIndex.next;
+                count--;
+            }
+        } else if (bLen > aLen) {
+            int count = bLen - aLen;
+            while (count > 0) {
+                bIndex = bIndex.next;
+                count--;
+            }
+        }
+        // 再同步往后遍历
+        while (aIndex != bIndex) {
+            if (aIndex == null || bIndex == null) {
+                return null;
+            }
+            aIndex = aIndex.next;
+            bIndex = bIndex.next;
+        }
+        return aIndex;
     }
 
     /**
