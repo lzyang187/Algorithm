@@ -3,7 +3,8 @@ package main;
 public class Medium {
     public static void main(String[] args) {
 //        System.out.println(myPow(2.00000, -2147483648));
-        System.out.println(myPowQuick(2.00000, -2147483648));
+//        System.out.println(myPowQuick(2.00000, -2147483648));
+        System.out.println(cuttingRope(8));
     }
 
     /**
@@ -43,6 +44,36 @@ public class Medium {
             return 1 / result;
         }
         return result;
+    }
+
+    /**
+     * 剪绳子：给你一根长度为 n 的绳子，请把绳子剪成整数长度的 m 段（m、n都是整数，n>1并且m>1），每段绳子的长度记为 k[0],k[1]...k[m-1] 。
+     * 请问 k[0]*k[1]*...*k[m-1] 可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+     * 典型的动态规划
+     */
+    public static int cuttingRope(int n) {
+        if (n <= 1) {
+            throw new IllegalArgumentException("绳子长度不合法");
+        }
+        if (n == 2) {
+            return 1;
+        } else if (n == 3) {
+            return 2;
+        }
+        // 存储子问题的最优结果
+        int[] products = new int[n + 1];
+        products[1] = 1;
+        products[2] = 2;
+        products[3] = 3;
+        // 从下往上求解
+        for (int i = 4; i <= n; i++) {
+            int curMax = 0;
+            for (int j = 1; j <= i >> 1; j++) {
+                curMax = Math.max(products[j] * products[i - j], curMax);
+            }
+            products[i] = curMax;
+        }
+        return products[n];
     }
 
 }
