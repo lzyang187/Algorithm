@@ -210,32 +210,38 @@ public class Medium {
         if (root == null) {
             return null;
         }
-        LinkedList<TreeNode> linkedList = new LinkedList<>();
-        preorderTraversal(linkedList, root);
-        // 转换为树的结构
-        for (int i = 0; i < linkedList.size(); i++) {
-            TreeNode node = linkedList.get(i);
+        List<TreeNode> list = preorderTraversal(root);
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        // 转换为循环双向的结构
+        for (int i = 0; i < list.size(); i++) {
+            TreeNode node = list.get(i);
             if (i == 0) {
-                node.left = linkedList.getLast();
+                node.left = list.get(list.size() - 1);
             } else {
-                node.left = linkedList.get(i - 1);
+                node.left = list.get(i - 1);
             }
-            if (i == linkedList.size() - 1) {
-                node.right = linkedList.getFirst();
+            if (i == list.size() - 1) {
+                node.right = list.get(0);
             } else {
-                node.right = linkedList.get(i + 1);
+                node.right = list.get(i + 1);
             }
         }
-        return linkedList.getFirst();
+        return list.get(0);
     }
 
-    private void preorderTraversal(LinkedList<TreeNode> linkedList, TreeNode node) {
-        if (node == null) {
-            return;
+    /**
+     * 递归中序遍历
+     */
+    private List<TreeNode> preorderTraversal(TreeNode root) {
+        List<TreeNode> list = new ArrayList<>();
+        if (root != null) {
+            list.addAll(0, preorderTraversal(root.left));
+            list.add(root);
+            list.addAll(preorderTraversal(root.right));
         }
-        preorderTraversal(linkedList, node.left);
-        linkedList.offer(node);
-        preorderTraversal(linkedList, node.right);
+        return list;
     }
 
 }

@@ -510,6 +510,9 @@ public class Simple {
      * 比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
      */
     public static String reverseLeftWords(String s, int n) {
+        if (n < 1) {
+            return s;
+        }
         if (s == null || s.length() <= n) {
             return s;
         }

@@ -50,7 +50,6 @@ public class Medium {
         int left = 0;
         int right = matrix.length * matrix[0].length - 1;
         int mid;
-        // 余数
         while (left <= right) {
             mid = (left + right) >>> 1;
             // 转换为二维数组的坐标
@@ -154,7 +153,10 @@ public class Medium {
 
     /**
      * 连续子数组的最大和：输入一个整型数组，数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。
-     * 要求时间复杂度为O(n)。
+     * 要求时间复杂度为O(n)。例如：
+     * 输入: nums = [-2,1,-3,4,-1,2,1,-5,4]
+     * 输出: 6
+     * 解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
      */
     public static int maxSubArray(int[] nums) {
         if (nums == null || nums.length <= 0) {
