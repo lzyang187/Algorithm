@@ -799,4 +799,48 @@ public class Simple {
         return result;
     }
 
+    /**
+     * 买卖股票的最佳时机：给定一个数组 prices ，它的第i 个元素prices[i] 表示一支给定股票第 i 天的价格。
+     * 你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+     * 返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+     */
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 2) {
+            return 0;
+        }
+        int min = prices[0];
+        int maxProfit = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] < min) {
+                min = prices[i];
+            } else if (prices[i] - min > maxProfit) {
+                maxProfit = prices[i] - min;
+            }
+        }
+        return maxProfit;
+    }
+
+    /**
+     * 提莫攻击
+     */
+    public int findPoisonedDuration(int[] timeSeries, int duration) {
+        if (timeSeries == null || timeSeries.length <= 0 || duration <= 0) {
+            return 0;
+        }
+        if (timeSeries.length == 1) {
+            return duration;
+        }
+        int sum = 0;
+        for (int i = 0; i < timeSeries.length - 1; i++) {
+            int time = timeSeries[i] + duration - 1;
+            if (time < timeSeries[i + 1]) {
+                sum += duration;
+            } else {
+                sum += timeSeries[i + 1] - timeSeries[i];
+            }
+        }
+        // 加上最后一次攻击的时间
+        return sum + duration;
+    }
+
 }

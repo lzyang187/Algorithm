@@ -14,14 +14,15 @@ public class MinStack {
     /**
      * 数据栈
      */
-    private Stack<Integer> mDataStack = new Stack<>();
+    private final Stack<Integer> mDataStack;
     /**
      * 辅助栈
      */
-    private Stack<Integer> mMinStack = new Stack<>();
+    private final Stack<Integer> mMinStack;
 
     public MinStack() {
-
+        mDataStack = new Stack<>();
+        mMinStack = new Stack<>();
     }
 
     public void push(int x) {

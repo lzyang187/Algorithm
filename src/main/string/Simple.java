@@ -1,8 +1,6 @@
 package main.string;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Simple {
     public static void main(String[] args) {
@@ -517,6 +515,34 @@ public class Simple {
             return s;
         }
         return s.substring(n) + s.substring(0, n);
+    }
+
+    /**
+     * 最长回文串：给定一个包含大写字母和小写字母的字符串s，返回通过这些字母构造成的 最长的回文串。
+     * 在构造过程中，请注意 区分大小写 。比如"Aa"不能当做一个回文字符串。
+     * 输入:s = "abccccdd"
+     * 输出:7
+     * 解释:我们可以构造的最长的回文串是"dccaccd", 它的长度是 7。
+     */
+    public int longestPalindrome(String s) {
+        if (s == null || s.length() <= 0) {
+            return 0;
+        }
+        Set<Character> set = new HashSet<>();
+        int doubleCount = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (set.contains(s.charAt(i))) {
+                set.remove(s.charAt(i));
+                doubleCount++;
+            } else {
+                set.add(s.charAt(i));
+            }
+        }
+        if (set.isEmpty()) {
+            return doubleCount * 2;
+        } else {
+            return doubleCount * 2 + 1;
+        }
     }
 
 }
