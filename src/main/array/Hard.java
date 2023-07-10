@@ -57,6 +57,7 @@ public class Hard {
      * 限制：数组长度为 5，数组的数取值为 [0, 13] .
      * 输入: [0,0,1,2,5]
      * 输出: True
+     * 抽象建模能力
      */
     public static boolean isStraight(int[] nums) {
         int LENGTH = 5;

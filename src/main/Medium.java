@@ -4,7 +4,9 @@ public class Medium {
     public static void main(String[] args) {
 //        System.out.println(myPow(2.00000, -2147483648));
 //        System.out.println(myPowQuick(2.00000, -2147483648));
-        System.out.println(cuttingRope(8));
+//        System.out.println(cuttingRope(8));
+//        System.out.println(sumNums(3));
+        System.out.println(add(2, -1));
     }
 
     /**
@@ -74,6 +76,33 @@ public class Medium {
             products[i] = curMax;
         }
         return products[n];
+    }
+
+    /**
+     * 求1+2+…+n：要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+     * 发散思维能力
+     */
+    public static int sumNums(int n) {
+        int sum = n;
+        boolean flag = n > 0 && (sum += sumNums(n - 1)) > 0;
+        return sum;
+    }
+
+    /**
+     * 不用加减乘除做加法：写一个函数，求两个整数之和，要求在函数体内不得使用 “+”、“-”、“*”、“/” 四则运算符号。
+     * 发散思维能力
+     */
+    public static int add(int a, int b) {
+        // 1、只作各位相加不进位
+        int sum1 = a ^ b;
+        // 2、做进位
+        int sum2 = (a & b) << 1;
+        if (sum2 == 0) {
+            // 不产生进位了
+            return sum1;
+        }
+        // 3、前两个结果相加
+        return add(sum1, sum2);
     }
 
 }
