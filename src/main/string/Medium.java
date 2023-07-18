@@ -9,6 +9,9 @@ public class Medium {
         long time = System.currentTimeMillis();
         System.out.println(longestPalindrome("zudfweormatjycujjirzjpyrmaxurectxrtqedmmgergwdvjmjtstdhcihacqnothgttgqfywcpgnuvwglvfiuxteopoyizgehkwuvvkqxbnufkcbodlhdmbqyghkojrgokpwdhtdrwmvdegwycecrgjvuexlguayzcammupgeskrvpthrmwqaqsdcgycdupykppiyhwzwcplivjnnvwhqkkxildtyjltklcokcrgqnnwzzeuqioyahqpuskkpbxhvzvqyhlegmoviogzwuiqahiouhnecjwysmtarjjdjqdrkljawzasriouuiqkcwwqsxifbndjmyprdozhwaoibpqrthpcjphgsfbeqrqqoqiqqdicvybzxhklehzzapbvcyleljawowluqgxxwlrymzojshlwkmzwpixgfjljkmwdtjeabgyrpbqyyykmoaqdambpkyyvukalbrzoyoufjqeftniddsfqnilxlplselqatdgjziphvrbokofvuerpsvqmzakbyzxtxvyanvjpfyvyiivqusfrsufjanmfibgrkwtiuoykiavpbqeyfsuteuxxjiyxvlvgmehycdvxdorpepmsinvmyzeqeiikajopqedyopirmhymozernxzaueljjrhcsofwyddkpnvcvzixdjknikyhzmstvbducjcoyoeoaqruuewclzqqqxzpgykrkygxnmlsrjudoaejxkipkgmcoqtxhelvsizgdwdyjwuumazxfstoaxeqqxoqezakdqjwpkrbldpcbbxexquqrznavcrprnydufsidakvrpuzgfisdxreldbqfizngtrilnbqboxwmwienlkmmiuifrvytukcqcpeqdwwucymgvyrektsnfijdcdoawbcwkkjkqwzffnuqituihjaklvthulmcjrhqcyzvekzqlxgddjoir"));
         System.out.println(System.currentTimeMillis() - time);
+        time = System.currentTimeMillis();
+        System.out.println(longestPalindromeQuick("zudfweormatjycujjirzjpyrmaxurectxrtqedmmgergwdvjmjtstdhcihacqnothgttgqfywcpgnuvwglvfiuxteopoyizgehkwuvvkqxbnufkcbodlhdmbqyghkojrgokpwdhtdrwmvdegwycecrgjvuexlguayzcammupgeskrvpthrmwqaqsdcgycdupykppiyhwzwcplivjnnvwhqkkxildtyjltklcokcrgqnnwzzeuqioyahqpuskkpbxhvzvqyhlegmoviogzwuiqahiouhnecjwysmtarjjdjqdrkljawzasriouuiqkcwwqsxifbndjmyprdozhwaoibpqrthpcjphgsfbeqrqqoqiqqdicvybzxhklehzzapbvcyleljawowluqgxxwlrymzojshlwkmzwpixgfjljkmwdtjeabgyrpbqyyykmoaqdambpkyyvukalbrzoyoufjqeftniddsfqnilxlplselqatdgjziphvrbokofvuerpsvqmzakbyzxtxvyanvjpfyvyiivqusfrsufjanmfibgrkwtiuoykiavpbqeyfsuteuxxjiyxvlvgmehycdvxdorpepmsinvmyzeqeiikajopqedyopirmhymozernxzaueljjrhcsofwyddkpnvcvzixdjknikyhzmstvbducjcoyoeoaqruuewclzqqqxzpgykrkygxnmlsrjudoaejxkipkgmcoqtxhelvsizgdwdyjwuumazxfstoaxeqqxoqezakdqjwpkrbldpcbbxexquqrznavcrprnydufsidakvrpuzgfisdxreldbqfizngtrilnbqboxwmwienlkmmiuifrvytukcqcpeqdwwucymgvyrektsnfijdcdoawbcwkkjkqwzffnuqituihjaklvthulmcjrhqcyzvekzqlxgddjoir"));
+        System.out.println(System.currentTimeMillis() - time);
     }
 
     /**
@@ -34,8 +37,10 @@ public class Medium {
     }
 
     /**
-     * 最长回文子串：给你一个字符串 s，找到 s 中最长的回文子串。
-     * 如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。
+     * 最长回文子串：给你一个字符串 s，找到 s 中最长的回文子串。如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。
+     * 输入：s = "babad"
+     * 输出："bab"
+     * 解释："aba" 同样是符合题意的答案。
      */
     public static String longestPalindrome(String s) {
         if (s == null || s.length() < 1) {
@@ -49,6 +54,9 @@ public class Medium {
         }
     }
 
+    /**
+     * 自上向下递归，相对耗时
+     */
     public static String longestPalindrome(String s, Map<String, String> map) {
         if (s == null || s.length() < 1) {
             return null;
@@ -79,6 +87,55 @@ public class Medium {
             }
             return tailP;
         }
+    }
+
+    /**
+     * 最长回文子串：动态规划，分解子问题，如果i到j是回文串并且i-1和j+1相同，则i-1到j+1也是回文串
+     */
+    public static String longestPalindromeQuick(String s) {
+        if (s == null || s.length() < 1) {
+            return null;
+        }
+        if (s.length() == 1) {
+            // 只有一个字符
+            return s;
+        }
+        // 表示从i到j的字串是否是回文串
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            // 长度为1的子串都是回文串
+            dp[i][i] = true;
+        }
+        // 最长回文字串的长度
+        int maxLen = 1;
+        // 最长回文字串的起始位置
+        int startIndex = 0;
+        // 从下往上求解
+        for (int L = 2; L <= s.length(); L++) {
+            // 相当于滑动窗口
+            for (int i = 0; i < s.length(); i++) {
+                int j = L + i - 1;
+                if (j >= s.length()) {
+                    // 超出边界了
+                    break;
+                }
+                if (s.charAt(i) != s.charAt(j)) {
+                    dp[i][j] = false;
+                } else {
+                    if (L <= 3) {
+                        dp[i][j] = true;
+                    } else {
+                        dp[i][j] = dp[i + 1][j - 1];
+                    }
+                }
+                if (dp[i][j] && L > maxLen) {
+                    // 更新值
+                    maxLen = L;
+                    startIndex = i;
+                }
+            }
+        }
+        return s.substring(startIndex, startIndex + maxLen);
     }
 
     public static boolean isPalindromeStr(String s) {
