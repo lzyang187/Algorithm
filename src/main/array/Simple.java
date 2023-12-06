@@ -173,23 +173,14 @@ public class Simple {
         if (nums == null || nums.length <= 0) {
             return 0;
         }
-        if (nums.length == 1) {
-            return 1;
-        }
-        int index = 0;
-        int left = 0;
-        int right = 1;
-        while (right < nums.length) {
-            if (nums[left] == nums[right]) {
-                // 相同
-            } else {
-                index++;
-                nums[index] = nums[right];
-                left = index;
+        int realIndex = 0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[realIndex] != nums[i]) {
+                realIndex++;
+                nums[realIndex] = nums[i];
             }
-            right++;
         }
-        return ++index;
+        return ++realIndex;
     }
 
     /**
@@ -199,25 +190,14 @@ public class Simple {
         if (nums == null || nums.length <= 0) {
             return 0;
         }
-        if (nums.length == 1) {
-            if (nums[0] == val) {
-                return 0;
-            } else {
-                return 1;
+        int realIndex = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != val) {
+                nums[realIndex] = nums[i];
+                realIndex++;
             }
         }
-        int left = 0;
-        int right = 0;
-        while (right < nums.length) {
-            if (nums[right] == val) {
-
-            } else {
-                nums[left] = nums[right];
-                left++;
-            }
-            right++;
-        }
-        return left;
+        return realIndex;
     }
 
     /**
@@ -276,59 +256,37 @@ public class Simple {
         if (digits == null) {
             return null;
         }
-        int[] result = new int[digits.length];
         int plus = 1;
         for (int i = digits.length - 1; i >= 0; i--) {
-            if (plus <= 0) {
-                result[i] = digits[i];
-            } else {
-                plus = digits[i] + plus;
-                if (i > 0) {
-                    result[i] = plus % 10;
+            if (digits[i] + plus > 9) {
+                if (i == 0) {
+                    // 首位
+                    digits[i] = 10;
                 } else {
-                    result[i] = plus;
+                    digits[i] = 0;
                 }
-                plus = plus / 10;
+            } else {
+                digits[i] = digits[i] + plus;
+                break;
             }
         }
         // 如果首位是10
-        if (result[0] == 10) {
-            int[] realResult = new int[result.length + 1];
+        if (digits[0] == 10) {
+            int[] realResult = new int[digits.length + 1];
             realResult[0] = 1;
             // 其他位置都是0，不用赋值
             return realResult;
         }
-        return result;
+        return digits;
     }
 
     /**
      * 合并两个有序数组：给你两个按 非递减顺序 排列的整数数组nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
      * 请你 合并 nums2 到 nums1 中，使合并后的数组同样按 非递减顺序 排列。
+     * 注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。为了应对这种情况，nums1 的初始长度为 m + n，
+     * 其中前 m 个元素表示应合并的元素，后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。
      */
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
-        if (nums2 == null || n <= 0) {
-            return;
-        }
-        for (int i = m; i < m + n; i++) {
-            nums1[i] = nums2[i - m];
-        }
-        // 对m+n个元素进行排序，冒泡
-        int temp;
-        for (int i = 0; i < m + n - 1; i++) {
-            for (int j = 0; j < m + n - 1 - i; j++) {
-                if (nums1[j] > nums1[j + 1]) {
-                    temp = nums1[j];
-                    nums1[j] = nums1[j + 1];
-                    nums1[j + 1] = temp;
-                }
-            }
-        }
-    }
-
-    /**
-     * merge的效率优化：先从后面插入
-     */
-    public static void merge2(int[] nums1, int m, int[] nums2, int n) {
         if (nums2 == null || n <= 0) {
             return;
         }
@@ -337,8 +295,7 @@ public class Simple {
         for (int k = m + n - 1; k >= 0; k--) {
             if (index2 < 0) {
                 // nums2全部插入完毕
-                nums1[k] = nums1[index1];
-                index1--;
+                break;
             } else if (index1 < 0) {
                 // nums1全部插入完毕
                 nums1[k] = nums2[index2];
@@ -704,35 +661,37 @@ public class Simple {
         }
         int left = 0;
         int right = nums.length - 1;
-        int mid = 0;
+        int mid;
+        int count = 0;
         while (left <= right) {
             mid = (left + right) >>> 1;
             if (nums[mid] == target) {
+                count++;
+                // 向左查找
+                int index = mid - 1;
+                while (index >= 0) {
+                    if (nums[index] == target) {
+                        count++;
+                        index--;
+                    } else {
+                        break;
+                    }
+                }
+                // 向右查找
+                index = mid + 1;
+                while (index < nums.length) {
+                    if (nums[index] == target) {
+                        count++;
+                        index++;
+                    } else {
+                        break;
+                    }
+                }
                 break;
             } else if (nums[mid] < target) {
                 left = mid + 1;
             } else {
                 right = mid - 1;
-            }
-        }
-        int count = 0;
-        if (nums[mid] == target) {
-            count++;
-            // 向左查找
-            int index = mid - 1;
-            while (index >= 0) {
-                if (nums[index] == target) {
-                    count++;
-                }
-                index--;
-            }
-            // 向右查找
-            index = mid + 1;
-            while (index < nums.length) {
-                if (nums[index] == target) {
-                    count++;
-                }
-                index++;
             }
         }
         return count;

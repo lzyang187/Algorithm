@@ -76,7 +76,7 @@ public class Simple {
         int x = nums[i];
         while (i < j) {
             // 从右向左找小于x的值
-            while (j > i && nums[j] >= x) {
+            while (i < j && nums[j] >= x) {
                 j--;
             }
             if (i < j) {

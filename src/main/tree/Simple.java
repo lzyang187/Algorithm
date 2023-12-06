@@ -11,7 +11,7 @@ public class Simple {
     }
 
     /**
-     * 输入一个二叉树，该函数输出它的镜像。
+     *  翻转二叉树：输入一个二叉树，该函数输出它的镜像。
      *
      * @param root
      * @return
@@ -19,10 +19,6 @@ public class Simple {
     public static TreeNode mirrorTree(TreeNode root) {
         if (root == null) {
             return null;
-        }
-        // 是否是叶子节点
-        if (root.left == null && root.right == null) {
-            return root;
         }
         TreeNode temp = root.left;
         root.left = root.right;
@@ -212,8 +208,8 @@ public class Simple {
      * 二叉搜索树的第k大节点：给定一棵二叉搜索树，请找出其中第 k 大的节点的值。
      */
     public int kthLargest(TreeNode root, int k) {
-        if (root == null) {
-            throw new NullPointerException("参数为空");
+        if (root == null || k <= 0) {
+            throw new NullPointerException("root参数为空或k不合法");
         }
         // 先处理根和右子树
         List<Integer> rightList = inorderTraversal(root.right);

@@ -222,12 +222,12 @@ public class Simple {
         int right = sb.length() - 1;
         while (left < right) {
             if (sb.charAt(left) != sb.charAt(right)) {
-                break;
+                return false;
             }
             left++;
             right--;
         }
-        return right <= left;
+        return true;
     }
 
     /**
@@ -422,7 +422,7 @@ public class Simple {
         int mid = s.length() >>> 1;
         while (len <= mid) {
             String sub = s.substring(0, len);
-            if (s.length() % sub.length() == 0) {
+            if (s.length() % len == 0) {
                 // s的长度是sub长度的整数倍
                 int i;
                 for (i = len; i < s.length(); i += len) {

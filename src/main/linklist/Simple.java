@@ -41,7 +41,7 @@ public class Simple {
     }
 
     /**
-     * 给定单向链表的头指针和一个要删除的节点，定义一个函数删除该节点。
+     * 删除链表的节点：给定单向链表的头指针和一个要删除的节点，定义一个函数删除该节点。
      * 返回删除后的链表的头节点
      */
     public static ListNode deleteNode(ListNode head, ListNode delNode) {
@@ -97,64 +97,65 @@ public class Simple {
     }
 
     /**
-     * 定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
+     * 反转链表：输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
      */
     public static ListNode reverseList(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
+        if (head == null) {
+            return null;
         }
-        ListNode cur = new ListNode(head.val);
-        cur.next = null;
-        ListNode next = head.next;
-        ListNode nextNext;
-        while (next != null) {
-            nextNext = next.next;
-            next.next = cur;
-            cur = next;
-            next = nextNext;
+        ListNode left = null;
+        ListNode cur = head;
+        ListNode right;
+        while (cur != null) {
+            right = cur.next;
+            cur.next = left;
+            left = cur;
+            cur = right;
         }
-        return cur;
+        return left;
     }
 
     /**
-     * 输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
+     * 合并两个有序链表：输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
      */
-    public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        if (l1 == null) {
-            return l2;
-        } else if (l2 == null) {
-            return l1;
+    public static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        if (list1 == null) {
+            return list2;
+        } else if (list2 == null) {
+            return list1;
         }
-        int l1Val = l1.val;
-        int l2Val = l2.val;
-        ListNode result;
-        if (l1Val <= l2Val) {
-            result = new ListNode(l1Val);
-            result.next = mergeTwoLists(l1.next, l2);
+        ListNode head;
+        if (list1.val <= list2.val) {
+            head = list1;
+            list1 = list1.next;
         } else {
-            result = new ListNode(l2Val);
-            result.next = mergeTwoLists(l1, l2.next);
+            head = list2;
+            list2 = list2.next;
         }
-        return result;
+        head.next = mergeTwoLists(list1, list2);
+        return head;
     }
 
     /**
-     * 给你一个链表的头节点 head ，判断链表中是否有环。
+     * 环形链表：给你一个链表的头节点 head ，判断链表中是否有环。
      */
     public boolean hasCycle(ListNode head) {
-        if (head == null || head.next == null) {
+        if (head == null) {
             return false;
         }
         ListNode slow = head;
-        ListNode fast = slow.next;
-        while (slow != fast) {
+        ListNode fast = head;
+        do {
             slow = slow.next;
-            if (fast.next == null || fast.next.next == null) {
+            if (fast.next == null) {
                 return false;
             }
             fast = fast.next.next;
-        }
-        return true;
+            if (slow == fast) {
+                return true;
+            }
+        } while (slow != null && fast != null);
+        return false;
     }
 
     /**
@@ -351,17 +352,12 @@ public class Simple {
         if (head == null) {
             return null;
         }
-        ListNode front = head;
-        ListNode next = head.next;
-        while (next != null) {
-            if (front.val != next.val) {
-                front.next = next;
-                front = next;
-            }
-            next = next.next;
-            if (next == null) {
-                front.next = null;
-                break;
+        ListNode cur = head;
+        while (cur.next != null) {
+            if (cur.val == cur.next.val) {
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
             }
         }
         return head;
