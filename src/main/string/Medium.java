@@ -43,7 +43,7 @@ public class Medium {
      * 解释："aba" 同样是符合题意的答案。
      */
     public static String longestPalindrome(String s) {
-        if (s == null || s.length() < 1) {
+        if (s == null || s.isEmpty()) {
             return null;
         }
         if (isPalindromeStr(s)) {

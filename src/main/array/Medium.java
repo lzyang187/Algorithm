@@ -144,7 +144,7 @@ public class Medium {
         for (Integer integer : countList) {
             totalCount += integer;
             result++;
-            if (totalCount >= (arr.length >>> 1)) {
+            if (totalCount >= (Math.ceil((double) arr.length / 2))) {
                 return result;
             }
         }

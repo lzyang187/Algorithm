@@ -68,4 +68,40 @@ public class Medium {
         return result;
     }
 
+    public static Node copyRandomListQuick(Node head) {
+        if (head == null) {
+            return null;
+        }
+        // key是原节点，value是复制的节点
+        HashMap<Node, Node> map = new HashMap<>();
+        Node result = new Node(head.val);
+        // 将头节点放入map
+        map.put(head, result);
+        Node cur = head;
+        Node curCopy = result;
+        while (cur != null) {
+            if (cur.next != null) {
+                if (map.containsKey(cur.next)) {
+                    curCopy.next = map.get(cur.next);
+                } else {
+                    Node copy = new Node(cur.next.val);
+                    curCopy.next = copy;
+                    map.put(cur.next, copy);
+                }
+            }
+            if (cur.random != null) {
+                if (map.containsKey(cur.random)) {
+                    curCopy.random = map.get(cur.random);
+                } else {
+                    Node copy = new Node(cur.random.val);
+                    curCopy.random = copy;
+                    map.put(cur.random, copy);
+                }
+            }
+            cur = cur.next;
+            curCopy = curCopy.next;
+        }
+        return result;
+    }
+
 }
