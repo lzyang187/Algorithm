@@ -36,7 +36,7 @@ class TwoQueueStack {
         }
     }
 
-    fun top(): Int {
+    fun peek(): Int {
         if (mQueue1.isEmpty()) {
             if (mQueue2.isEmpty()) {
                 return -1
@@ -58,7 +58,7 @@ class TwoQueueStack {
         }
     }
 
-    fun empty(): Boolean {
+    fun isEmpty(): Boolean {
         return mQueue1.isEmpty() && mQueue2.isEmpty()
     }
 }

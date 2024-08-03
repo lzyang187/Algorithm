@@ -10,11 +10,11 @@ class TwoStackQueue {
     private val mStack1 = Stack<Int>()
     private val mStack2 = Stack<Int>()
 
-    fun appendTail(value: Int) {
+    fun offer(value: Int) {
         mStack1.push(value)
     }
 
-    fun deleteHead(): Int {
+    fun poll(): Int {
         if (mStack2.empty()) {
             if (mStack1.empty()) {
                 return -1

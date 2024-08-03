@@ -12,11 +12,11 @@ fun main() {
     val stack = TwoQueueStack()
     stack.push(1)
     stack.push(2)
-    println(stack.top())
+    println(stack.peek())
     println(stack.pop())
-    println(stack.top())
+    println(stack.peek())
     println(stack.pop())
-    println(stack.empty())
+    println(stack.isEmpty())
 
     println(reverse(-4236469))
 }
