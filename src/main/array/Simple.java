@@ -232,20 +232,30 @@ public class Simple {
             return;
         }
         int[] digits = new int[n];
-        boolean loop;
-        do {
-            digits = plusOne(digits);
-            loop = false;
-            for (int digit : digits) {
-                if (digit != 9) {
-                    loop = true;
-                    break;
-                }
-            }
+        while (plusOneForNumbersMax(digits)) {
             System.out.println(Arrays.toString(digits));
-        } while (loop);
+        }
     }
 
+    public static boolean plusOneForNumbersMax(int[] digits) {
+        if (digits == null || digits.length <= 0) {
+            return false;
+        }
+        for (int i = digits.length - 1; i >= 0; i--) {
+            if (digits[i] + 1 > 9) {
+                if (i == 0) {
+                    // 首位
+                    return false;
+                } else {
+                    digits[i] = 0;
+                }
+            } else {
+                digits[i] = digits[i] + 1;
+                break;
+            }
+        }
+        return true;
+    }
 
     /**
      * 加一：给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
@@ -253,8 +263,8 @@ public class Simple {
      * 你可以假设除了整数 0 之外，这个整数不会以零开头。
      */
     public static int[] plusOne(int[] digits) {
-        if (digits == null) {
-            return null;
+        if (digits == null || digits.length <= 0) {
+            return digits;
         }
         int plus = 1;
         for (int i = digits.length - 1; i >= 0; i--) {
