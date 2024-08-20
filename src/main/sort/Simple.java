@@ -15,16 +15,19 @@ public class Simple {
         int[] copy1 = Arrays.copyOfRange(ints, 0, ints.length);
         int[] nums = {2, 3, 5, 11, 28, 1, 6, 1, 2};
 //        bubble(ints);
-        insertSort(nums);
-        System.out.println("insertSort：" + Arrays.toString(nums));
+//        System.out.println("bubble: " + Arrays.toString(ints));
+//        insertSort(nums);
+//        System.out.println("insertSort：" + Arrays.toString(nums));
         long start = System.currentTimeMillis();
         quick(copy, 0, copy.length - 1);
         System.out.println("quick用时：" + (System.currentTimeMillis() - start));
+//        System.out.println("quick: " + Arrays.toString(copy));
 //        System.out.println(Arrays.toString(copy));
 
         long start1 = System.currentTimeMillis();
         Arrays.sort(copy1);
         System.out.println("系统的quick用时：" + (System.currentTimeMillis() - start1));
+//        System.out.println("系统的quick: " + Arrays.toString(copy1));
     }
 
     /**
@@ -53,7 +56,7 @@ public class Simple {
      * 然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。
      */
     public static void quick(int[] nums, int l, int r) {
-        if (l >= r || nums == null || nums.length <= 1) {
+        if (nums == null || nums.length <= 1 || l < 0 || r >= nums.length || l >= r) {
             return;
         }
         int partition = partition(nums, l, r);
@@ -67,7 +70,7 @@ public class Simple {
      * 一趟快速排序
      */
     public static int partition(int[] nums, int l, int r) {
-        if (nums == null || nums.length <= 0 || l > r) {
+        if (nums == null || nums.length <= 0 || l < 0 || r >= nums.length || l >= r) {
             throw new IllegalArgumentException("参数错误");
         }
         int i = l;
