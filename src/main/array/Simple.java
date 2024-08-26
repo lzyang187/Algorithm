@@ -440,15 +440,15 @@ public class Simple {
 
     /**
      * 杨辉三角：给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
-     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和，第一行为 1。
      */
     public static List<List<Integer>> generate(int numRows) {
         if (numRows <= 0) {
             return null;
         }
-        List<List<Integer>> list = new ArrayList<>();
+        List<List<Integer>> list = new ArrayList<>(numRows);
         for (int row = 1; row <= numRows; row++) {
-            List<Integer> sub = new ArrayList<>();
+            List<Integer> sub = new ArrayList<>(row);
             if (row == 1) {
                 sub.add(1);
             } else {
@@ -471,8 +471,8 @@ public class Simple {
     }
 
     /**
-     * 杨辉三角 II：给定一个非负索引 rowIndex，返回「杨辉三角」的第 rowIndex 行。
-     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+     * 杨辉三角 II：给定一个非负索引 rowIndex，rowIndex 为 0时是第一行。返回「杨辉三角」的第 rowIndex 行。
+     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和，第一行为 1。
      */
     public List<Integer> getRow(int rowIndex) {
         if (rowIndex < 0) {
