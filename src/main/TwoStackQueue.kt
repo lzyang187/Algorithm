@@ -14,19 +14,22 @@ class TwoStackQueue {
         mStack1.push(value)
     }
 
-    fun poll(): Int {
+    fun poll(): Int? {
         if (mStack2.empty()) {
             if (mStack1.empty()) {
-                return -1
+                return null
             } else {
-                for (i in 0 until mStack1.size) {
+                // 一次全部出栈
+                while (mStack1.isNotEmpty()) {
                     mStack2.push(mStack1.pop())
                 }
-                return mStack2.pop()
             }
-        } else {
-            return mStack2.pop()
         }
-
+        return mStack2.pop()
     }
+
+    fun isEmpty(): Boolean {
+        return mStack1.isEmpty() && mStack2.isEmpty()
+    }
+
 }

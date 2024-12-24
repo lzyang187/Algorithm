@@ -13,7 +13,10 @@ public class Medium {
      * 弹出序列。
      */
     public static boolean validateStackSequences(int[] pushed, int[] popped) {
-        if (pushed == null || popped == null) {
+        if (pushed == null || pushed.length <= 0 || popped == null || popped.length <= 0) {
+            throw new RuntimeException("参数错误");
+        }
+        if (pushed.length != popped.length) {
             return false;
         }
         Stack<Integer> stack = new Stack<>();

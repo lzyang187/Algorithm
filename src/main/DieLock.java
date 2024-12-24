@@ -1,5 +1,8 @@
 package main;
 
+/**
+ * 死锁的示例。两个线程两把锁，两个线程各拿一把锁然后互相等待对方释放另一把锁。
+ */
 public class DieLock {
 
     private static final Object lock1 = new Object();

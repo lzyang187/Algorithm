@@ -97,15 +97,13 @@ public class Simple {
         if (n == 1 || n == 2) {
             return 1;
         }
-        int one = 1;
-        int two = 1;
-        int curIndex = 3;
-        int result = one + two;
-        while (curIndex != n) {
-            one = two;
-            two = result;
-            result = one + two;
-            curIndex++;
+        int left = 1;
+        int right = 1;
+        int result = 0;
+        for (int i = 3; i <= n; i++) {
+            result = left + right;
+            left = right;
+            right = result;
         }
         return result;
     }
@@ -122,15 +120,13 @@ public class Simple {
         } else if (n == 2) {
             return 2;
         }
-        int one = 1;
-        int two = 2;
+        int left = 1;
+        int right = 2;
         int result = 0;
-        int index = 2;
-        while (index < n) {
-            result = (one + two) % 1000000007;
-            one = two;
-            two = result;
-            index++;
+        for (int i = 3; i <= n; i++) {
+            result = (left + right) % 1000000007;
+            left = right;
+            right = result;
         }
         return result;
     }
@@ -205,7 +201,10 @@ public class Simple {
      * 丑数：求按从小到大的顺序的第 n 个丑数。习惯上我们把1当作第一个丑数。
      */
     public static int nthUglyNumber(int n) {
-        if (n <= 1) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("n不能<= 0");
+        }
+        if (n == 1) {
             return 1;
         }
         int[] array = new int[n];
@@ -213,7 +212,7 @@ public class Simple {
         int i2 = 0;
         int i3 = 0;
         int i5 = 0;
-        for (int i = 1; i < array.length; i++) {
+        for (int i = 1; i < n; i++) {
             int next2 = array[i2] * 2;
             int next3 = array[i3] * 3;
             int next5 = array[i5] * 5;

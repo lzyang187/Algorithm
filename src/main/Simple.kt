@@ -17,6 +17,7 @@ fun main() {
     println(stack.peek())
     println(stack.pop())
     println(stack.isEmpty())
+    println(stack.pop())
 
     println(reverse(-4236469))
 }
@@ -32,15 +33,14 @@ fun twoSum(nums: IntArray?, target: Int): IntArray? {
         return null
     }
     val result = IntArray(2)
-    for (i in 0 until nums.size - 1) {
-        for (j in i + 1 until nums.size) {
-            if (nums[i] + nums[j] == target) {
-                result[0] = i
-                result[1] = j
-                println(result[0])
-                println(result[1])
-                return result
-            }
+    // key是差值，value是索引
+    val map = HashMap<Int, Int>()
+    for (i in nums.indices) {
+        if (map.containsKey(nums[i])) {
+            result[0] = map[nums[i]]!!
+            result[1] = i
+        } else {
+            map[target - nums[i]] = i
         }
     }
     return result
@@ -75,18 +75,18 @@ fun reverse(x: Int): Int {
  * 在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。
  * 数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字
  */
-fun findRepeatNumber(nums: IntArray): Int {
+fun findRepeatNumber(nums: IntArray): Int? {
     if (nums.isNotEmpty()) {
-        val map = HashMap<Int, Int>()
+        val set = HashSet<Int>()
         nums.forEach {
-            if (map.containsKey(it)) {
+            if (set.contains(it)) {
                 return it
             } else {
-                map[it] = 0
+                set.add(it)
             }
         }
     }
-    return -1
+    return null
 }
 
 /**

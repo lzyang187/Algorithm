@@ -12,48 +12,48 @@ class TwoQueueStack {
 
     fun push(x: Int) {
         if (mQueue1.isEmpty()) {
-            mQueue2.add(x)
-        } else if (mQueue2.isEmpty()) {
-            mQueue1.add(x)
+            mQueue2.offer(x)
+        } else {
+            mQueue1.offer(x)
         }
     }
 
-    fun pop(): Int {
+    fun pop(): Int? {
         if (mQueue1.isEmpty()) {
             if (mQueue2.isEmpty()) {
-                return -1
+                return null
             } else {
                 for (i in 0 until mQueue2.size - 1) {
-                    mQueue1.add(mQueue2.poll())
+                    mQueue1.offer(mQueue2.poll())
                 }
                 return mQueue2.poll()
             }
         } else {
             for (i in 0 until mQueue1.size - 1) {
-                mQueue2.add(mQueue1.poll())
+                mQueue2.offer(mQueue1.poll())
             }
             return mQueue1.poll()
         }
     }
 
-    fun peek(): Int {
+    fun peek(): Int? {
         if (mQueue1.isEmpty()) {
             if (mQueue2.isEmpty()) {
-                return -1
+                return null
             } else {
                 for (i in 0 until mQueue2.size - 1) {
-                    mQueue1.add(mQueue2.poll())
+                    mQueue1.offer(mQueue2.poll())
                 }
                 val top = mQueue2.poll()
-                mQueue1.add(top)
+                mQueue1.offer(top)
                 return top
             }
         } else {
             for (i in 0 until mQueue1.size - 1) {
-                mQueue2.add(mQueue1.poll())
+                mQueue2.offer(mQueue1.poll())
             }
             val top = mQueue1.poll()
-            mQueue2.add(top)
+            mQueue2.offer(top)
             return top
         }
     }
