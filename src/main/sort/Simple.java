@@ -3,6 +3,12 @@ package main.sort;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * 在计算机科学中，时间复杂度中的对数通常是以 2 为底的，尤其是在涉及二分查找、树结构等情况下。
+ * 这是因为这些算法和数据结构通常涉及将问题规模减半的操作，因此自然地与以 2 为底的对数相关。
+ * 然而，在数学中，如果对数没有明确指定底数，通常默认是以 10 为底的（常称为常用对数），或者以 e 为底的（自然对数，记作 ln）。
+ * 但在计算机科学的复杂度分析中，底数通常是 2，除非另有说明。
+ */
 public class Simple {
     public static void main(String[] args) {
         int[] ints = new int[100000];
@@ -31,7 +37,8 @@ public class Simple {
     }
 
     /**
-     * 冒泡排序：通过一趟排序将最大的数排到最后
+     * 冒泡排序：通过一趟排序将最大的数排到最后。
+     * 平均时间复杂度O(n^2)
      */
     public static void bubble(int[] nums) {
         long start = System.currentTimeMillis();
@@ -54,6 +61,7 @@ public class Simple {
     /**
      * 快速排序：通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，
      * 然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。
+     * 平均时间复杂度O(nlogn)
      */
     public static void quick(int[] nums, int l, int r) {
         if (nums == null || nums.length <= 1 || l < 0 || r >= nums.length || l >= r) {

@@ -123,27 +123,22 @@ public class Simple {
         if (strs == null || strs.length <= 0) {
             return "";
         }
-        char preChar;
-        int preIndex = 0;
-        int i = 0;
-        while (true) {
-            if (preIndex >= strs[0].length()) {
-                if (preIndex <= 0) {
-                    return "";
-                }
-                return strs[0].substring(0, preIndex);
-            }
-            preChar = strs[0].charAt(preIndex);
-            for (i = 1; i < strs.length; i++) {
-                if (preIndex >= strs[i].length()) {
-                    return strs[0].substring(0, preIndex);
-                }
-                if (strs[i].charAt(preIndex) != preChar) {
-                    return strs[0].substring(0, preIndex);
-                }
-            }
-            preIndex++;
+        if (strs[0] == null || strs[0].isEmpty()) {
+            return "";
         }
+        StringBuilder sb = new StringBuilder();
+        // 以第一个字符串为基准
+        for (int i = 0; i < strs[0].length(); i++) {
+            // 数组中第一个后面的每个字符串j的值是否相同
+            for (int j = 1; j < strs.length; j++) {
+                if (strs[j] == null || strs[j].length() <= i || strs[j].charAt(i) != strs[0].charAt(i)) {
+                    // strs[j]的长度不够了或不匹配
+                    return sb.toString();
+                }
+            }
+            sb.append(strs[0].charAt(i));
+        }
+        return sb.toString();
     }
 
     /**
@@ -193,7 +188,7 @@ public class Simple {
      * 最后一个单词的长度：给你一个字符串 s，由若干单词组成，单词前后用一些空格字符隔开。返回字符串中 最后一个 单词的长度。
      */
     public static int lengthOfLastWord(String s) {
-        if (s == null || s.length() <= 0) {
+        if (s == null || s.isEmpty()) {
             return 0;
         }
         s = s.trim();
@@ -253,7 +248,7 @@ public class Simple {
      */
     public static String convertToExcelTitle(int columnNumber) {
         if (columnNumber <= 0) {
-            return "";
+            throw new IllegalArgumentException("参数错误");
         }
         StringBuilder sb = new StringBuilder();
         int d;
@@ -362,20 +357,11 @@ public class Simple {
                 sb.append(s.charAt(i));
             } else {
                 char last = sb.charAt(sb.length() - 1);
-                if (Character.isLowerCase(last)) {
-                    // 是小写字母
-                    if ((s.charAt(i)) == (Character.toUpperCase(last))) {
-                        sb.delete(sb.length() - 1, sb.length());
-                    } else {
-                        sb.append(s.charAt(i));
-                    }
+                if (last != s.charAt(i) && Character.toLowerCase(last) == Character.toLowerCase(s.charAt(i))) {
+                    // 是相同的大小写字符
+                    sb.delete(sb.length() - 1, sb.length());
                 } else {
-                    // 是大写字母
-                    if (Character.toLowerCase(last) == (s.charAt(i))) {
-                        sb.delete(sb.length() - 1, sb.length());
-                    } else {
-                        sb.append(s.charAt(i));
-                    }
+                    sb.append(s.charAt(i));
                 }
             }
         }
@@ -400,13 +386,12 @@ public class Simple {
                 if (map.get(s.charAt(i)) != t.charAt(i)) {
                     return false;
                 }
-            } else {
-                if (map.containsValue(t.charAt(i))) {
-                    // 说明不同字符映射到相同字符了
-                    return false;
-                }
-                map.put(s.charAt(i), t.charAt(i));
             }
+            if (map.containsValue(t.charAt(i))) {
+                // 说明不同字符映射到相同字符了
+                return false;
+            }
+            map.put(s.charAt(i), t.charAt(i));
         }
         return true;
     }
@@ -415,7 +400,7 @@ public class Simple {
      * 重复的子字符串：给定一个非空的字符串 s ，检查是否可以通过由它的一个子串重复多次构成。
      */
     public static boolean repeatedSubstringPattern(String s) {
-        if (s == null || s.length() <= 0) {
+        if (s == null || s.isEmpty()) {
             throw new NullPointerException("参数为空");
         }
         int len = 1;
@@ -444,7 +429,7 @@ public class Simple {
      * 复杂度为O(n ^ 2)
      */
     public static char firstUniqChar(String s) {
-        if (s == null || s.length() <= 0) {
+        if (s == null || s.isEmpty()) {
             return ' ';
         }
         for (int i = 0; i < s.length(); i++) {
@@ -460,7 +445,7 @@ public class Simple {
      * 第一个只出现一次的字符：在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母。
      */
     public static char firstUniqCharQuick(String s) {
-        if (s == null || s.length() <= 0) {
+        if (s == null || s.isEmpty()) {
             return ' ';
         }
         LinkedHashMap<Character, Integer> map = new LinkedHashMap<>();
@@ -486,7 +471,7 @@ public class Simple {
      * 注意：输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括；如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
      */
     public static String reverseWords(String s) {
-        if (s == null || s.length() <= 0) {
+        if (s == null || s.isEmpty()) {
             return s;
         }
         String[] split = s.trim().split(" ");
@@ -525,23 +510,23 @@ public class Simple {
      * 解释:我们可以构造的最长的回文串是"dccaccd", 它的长度是 7。
      */
     public int longestPalindrome(String s) {
-        if (s == null || s.length() <= 0) {
+        if (s == null || s.isEmpty()) {
             return 0;
         }
         Set<Character> set = new HashSet<>();
-        int doubleCount = 0;
+        int result = 0;
         for (int i = 0; i < s.length(); i++) {
             if (set.contains(s.charAt(i))) {
                 set.remove(s.charAt(i));
-                doubleCount++;
+                result += 2;
             } else {
                 set.add(s.charAt(i));
             }
         }
         if (set.isEmpty()) {
-            return doubleCount * 2;
+            return result;
         } else {
-            return doubleCount * 2 + 1;
+            return result + 1;
         }
     }
 

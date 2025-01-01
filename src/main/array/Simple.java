@@ -25,48 +25,6 @@ public class Simple {
 
 //        System.out.println(Arrays.toString(getLeastNumbersQuick(new int[]{0, 0, 0, 2, 0, 5}, 0)));
 //        System.out.println(thirdMax(new int[]{1, 2, 3, 9}));
-        System.out.println(Arrays.deepToString(findContinuousSequence(9)));
-    }
-
-    /**
-     * 旋转数组的最小数字：把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。
-     * 给你一个可能存在重复元素值的数组numbers，它原来是一个升序排列的数组，并按上述情形进行了一次旋转。请返回旋转数组的最小元素。
-     * 例如，数组[3,4,5,1,2] 为 [1,2,3,4,5] 的一次旋转，该数组的最小值为 1。
-     * 注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
-     */
-    public int minArray(int[] numbers) {
-        if (numbers.length == 0) {
-            return -1;
-        }
-        if (numbers.length == 1) {
-            return numbers[0];
-        }
-        int front = 0;
-        int tail = numbers.length - 1;
-        if (numbers[front] < numbers[tail]) {
-            return numbers[0];
-        } else {
-            int mid = numbers.length / 2;
-            while (front < tail - 1) {
-                if (numbers[mid] > numbers[front]) {
-                    front = mid;
-                    mid = (front + tail) / 2;
-                } else if (numbers[mid] < numbers[front]) {
-                    tail = mid;
-                    mid = (front + tail) / 2;
-                } else {
-                    // 只能按顺序查找了
-                    int min = numbers[0];
-                    for (int i = 1; i < numbers.length; i++) {
-                        if (numbers[i] < min) {
-                            return numbers[i];
-                        }
-                    }
-                    break;
-                }
-            }
-            return numbers[tail];
-        }
     }
 
     /**
@@ -95,74 +53,6 @@ public class Simple {
             }
         }
         return nums;
-    }
-
-    /**
-     * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字
-     */
-    public static int[] spiralOrder(int[][] matrix) {
-        if (matrix == null || matrix.length <= 0 || matrix[0].length <= 0) {
-            return new int[]{};
-        }
-        int[] resultArray = new int[matrix.length * matrix[0].length];
-        int curArrayIndex = 0;
-        int startRow = 0;
-        int startCol = 0;
-        int endRow = matrix.length - 1;
-        int endCol = matrix[0].length - 1;
-        while (startRow <= endRow && startCol <= endCol) {
-            int curRow = startRow;
-            int curCol = startCol;
-            if (startRow == endRow) {
-                // 只有一行了
-                while (curCol <= endCol) {
-                    resultArray[curArrayIndex] = matrix[startRow][curCol];
-                    curArrayIndex++;
-                    curCol++;
-                }
-            } else if (startCol == endCol) {
-                // 只有一列了
-                while (curRow <= endRow) {
-                    resultArray[curArrayIndex] = matrix[curRow][startCol];
-                    curArrayIndex++;
-                    curRow++;
-                }
-            } else {
-                // 一周
-                // 上
-                while (curCol <= endCol) {
-                    resultArray[curArrayIndex] = matrix[startRow][curCol];
-                    curArrayIndex++;
-                    curCol++;
-                }
-                // 右
-                curRow++;
-                while (curRow <= endRow) {
-                    resultArray[curArrayIndex] = matrix[curRow][endCol];
-                    curArrayIndex++;
-                    curRow++;
-                }
-                // 下
-                curCol -= 2;
-                while (curCol >= startCol) {
-                    resultArray[curArrayIndex] = matrix[endRow][curCol];
-                    curArrayIndex++;
-                    curCol--;
-                }
-                // 左
-                curRow -= 2;
-                while (curRow > startRow) {
-                    resultArray[curArrayIndex] = matrix[curRow][startCol];
-                    curArrayIndex++;
-                    curRow--;
-                }
-            }
-            startRow++;
-            startCol++;
-            endRow--;
-            endCol--;
-        }
-        return resultArray;
     }
 
     /**
@@ -293,10 +183,13 @@ public class Simple {
     /**
      * 合并两个有序数组：给你两个按 非递减顺序 排列的整数数组nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
      * 请你 合并 nums2 到 nums1 中，使合并后的数组同样按 非递减顺序 排列。
-     * 注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。为了应对这种情况，nums1 的初始长度为 m + n，
-     * 其中前 m 个元素表示应合并的元素，后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。
+     * 注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。为了应对这种情况，nums1 的初始长度为 m + n，其中前 m 个元素表示应合并的元素，
+     * 后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。
      */
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
+        if (nums1 == null || nums1.length < m + n) {
+            throw new RuntimeException("参数错误");
+        }
         if (nums2 == null || n <= 0) {
             return;
         }
@@ -325,6 +218,9 @@ public class Simple {
      * 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
      */
     public static int majorityElement(int[] nums) {
+        if (nums == null || nums.length <= 0) {
+            throw new IllegalArgumentException("参数不合法");
+        }
         // 先排序
         Arrays.sort(nums);
         // 中间的那个数就是多数元素
@@ -395,7 +291,7 @@ public class Simple {
     }
 
     /**
-     * 矩阵中的幸运数：给你一个 m * n 的矩阵，矩阵中的数字 各不相同 。请你按 任意 顺序返回矩阵中的所有幸运数。
+     * 矩阵中的幸运数：给你一个 m * n 的矩阵，矩阵中的数字 “各不相同” 。请你按 任意 顺序返回矩阵中的所有幸运数。
      * 幸运数 是指矩阵中满足同时下列两个条件的元素：
      * 在同一行的所有元素中最小
      * 在同一列的所有元素中最大
@@ -530,15 +426,15 @@ public class Simple {
         for (int i : nums1) {
             set.add(i);
         }
-        Set<Integer> result = new HashSet<>();
+        Set<Integer> set2 = new HashSet<>();
         for (int i : nums2) {
             if (set.contains(i)) {
-                result.add(i);
+                set2.add(i);
             }
         }
-        int[] results = new int[result.size()];
+        int[] results = new int[set2.size()];
         int i = 0;
-        for (Integer integer : result) {
+        for (Integer integer : set2) {
             results[i] = integer;
             i++;
         }
@@ -708,7 +604,7 @@ public class Simple {
     }
 
     /**
-     * 和为s的两个数字：输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+     * 和为s的两个数字：输入一个“递增排序”的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
      */
     public int[] twoSum(int[] nums, int target) {
         if (nums == null || nums.length <= 0) {
@@ -727,45 +623,6 @@ public class Simple {
             }
         }
         return null;
-    }
-
-    /**
-     * 和为s的连续正数序列：输入一个正整数 target ，输出所有和为 target 的连续正整数序列（至少含有两个数）。
-     * 序列内的数字由小到大排列，不同序列按照首个数字从小到大排列。
-     */
-    public static int[][] findContinuousSequence(int target) {
-        if (target <= 2) {
-            return null;
-        }
-        int small = 1;
-        int large = 2;
-        int maxLarge = (target + 1) >>> 1;
-        List<int[]> list = new ArrayList<>();
-        int subMaxCount = 0;
-        while (small < large && large <= maxLarge) {
-            int count = 0;
-            for (int i = small; i <= large; i++) {
-                count += i;
-            }
-            if (count == target) {
-                int[] sub = new int[large - small + 1];
-                for (int i = small; i <= large; i++) {
-                    sub[i - small] = i;
-                }
-                subMaxCount = Math.max(subMaxCount, sub.length);
-                list.add(sub);
-                large++;
-            } else if (count > target) {
-                small++;
-            } else {
-                large++;
-            }
-        }
-        int[][] result = new int[list.size()][subMaxCount];
-        for (int i = 0; i < list.size(); i++) {
-            result[i] = list.get(i);
-        }
-        return result;
     }
 
     /**
@@ -804,15 +661,15 @@ public class Simple {
             return duration;
         }
         int sum = 0;
-        for (int i = 0; i < timeSeries.length; i++) {
-            int time = timeSeries[i] + duration - 1;
-            // 注意判断越界情况
-            if ((i + 1) == timeSeries.length || time < timeSeries[i + 1]) {
+        for (int i = 1; i < timeSeries.length; i++) {
+            if (timeSeries[i] - timeSeries[i - 1] >= duration) {
                 sum += duration;
             } else {
-                sum += timeSeries[i + 1] - timeSeries[i];
+                sum += timeSeries[i] - timeSeries[i - 1];
             }
         }
+        // 加上最后一秒后的
+        sum += duration;
         return sum;
     }
 
