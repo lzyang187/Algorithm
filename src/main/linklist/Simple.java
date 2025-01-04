@@ -49,7 +49,8 @@ public class Simple {
             return head;
         }
         if (head == delNode) {
-            return null;
+            // 要删除的是头节点
+            return head.next;
         }
         if (delNode.next == null) {
             // 要删除的节点是尾节点，只能遍历才能找到前面一个节点了
@@ -75,25 +76,56 @@ public class Simple {
         if (head == null || k <= 0) {
             return null;
         }
-        int frontIndex = 0;
-        ListNode frontNode = head;
-        ListNode lastNode = head;
-        while (frontIndex < k) {
-            frontNode = frontNode.next;
-            frontIndex++;
-            if (frontNode == null) {
-                if (frontIndex == k) {
+        int count = 0;
+        ListNode rightNode = head;
+        ListNode leftNode = head;
+        while (count < k) {
+            rightNode = rightNode.next;
+            count++;
+            if (rightNode == null) {
+                if (count == k) {
                     return head;
                 } else {
                     return null;
                 }
             }
         }
-        while (frontNode != null) {
-            frontNode = frontNode.next;
-            lastNode = lastNode.next;
+        while (rightNode != null) {
+            rightNode = rightNode.next;
+            leftNode = leftNode.next;
         }
-        return lastNode;
+        return leftNode;
+    }
+
+    /**
+     * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+     */
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head == null || n <= 0) {
+            return head;
+        }
+        ListNode right = head;
+        int count = 0;
+        while (count < n) {
+            count++;
+            if (right.next == null) {
+                if (count == n) {
+                    // 正好删除头结点
+                    return head.next;
+                } else {
+                    // 长度不够n
+                    return head;
+                }
+            }
+            right = right.next;
+        }
+        ListNode left = head;
+        while (right.next != null) {
+            right = right.next;
+            left = left.next;
+        }
+        left.next = left.next.next;
+        return head;
     }
 
     /**
@@ -156,37 +188,6 @@ public class Simple {
             }
         } while (slow != null && fast != null);
         return false;
-    }
-
-    /**
-     * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
-     */
-    public static ListNode removeNthFromEnd(ListNode head, int n) {
-        if (head == null || n <= 0) {
-            return head;
-        }
-        ListNode front = head;
-        int count = 0;
-        while (count < n) {
-            count++;
-            if (front.next == null) {
-                if (count == n) {
-                    // 正好删除头结点
-                    return head.next;
-                } else {
-                    // 长度不够n
-                    return head;
-                }
-            }
-            front = front.next;
-        }
-        ListNode back = head;
-        while (front.next != null) {
-            front = front.next;
-            back = back.next;
-        }
-        back.next = back.next.next;
-        return head;
     }
 
     /**
@@ -266,20 +267,17 @@ public class Simple {
      * 链表的中间结点：给你单链表的头结点 head ，请你找出并返回链表的中间结点。如果有两个中间结点，则返回第二个中间结点。
      */
     public ListNode middleNode(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
+        if (head == null) {
+            return null;
         }
         ListNode slow = head;
         ListNode fast = head;
-        while (true) {
-            if (fast.next == null) {
-                break;
+        while (fast != null) {
+            fast = fast.next;
+            if (fast == null) {
+                return slow;
             }
-            if (fast.next.next == null) {
-                slow = slow.next;
-                break;
-            }
-            fast = fast.next.next;
+            fast = fast.next;
             slow = slow.next;
         }
         return slow;
@@ -293,29 +291,20 @@ public class Simple {
             return null;
         }
         // 找到头节点
-        while (head != null) {
-            if (head.val == val) {
-                head = head.next;
-            } else {
-                break;
+        while (head.val == val) {
+            head = head.next;
+            if (head == null) {
+                return null;
             }
         }
         ListNode pre = head;
-        ListNode cur = head;
-        while (cur != null) {
-            if (cur.val == val) {
+        while (pre.next != null) {
+            // 以前一个节点为基准，判断下一个节点的值是否相等
+            if (pre.next.val == val) {
                 // 移除此项
-                if (cur.next != null) {
-                    cur.val = cur.next.val;
-                    cur.next = cur.next.next;
-                } else {
-                    // 删除尾节点
-                    pre.next = null;
-                    break;
-                }
+                pre.next = pre.next.next;
             } else {
-                pre = cur;
-                cur = cur.next;
+                pre = pre.next;
             }
         }
         return head;
