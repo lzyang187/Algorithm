@@ -25,6 +25,10 @@ public class Simple {
 
 //        System.out.println(Arrays.toString(getLeastNumbersQuick(new int[]{0, 0, 0, 2, 0, 5}, 0)));
 //        System.out.println(thirdMax(new int[]{1, 2, 3, 9}));
+
+        int[] nums = {0, 0, 0, 1, 1, 1, 1, 0};
+        exchangeOddEven2(nums);
+        System.out.println(Arrays.toString(nums));
     }
 
     /**
@@ -671,6 +675,85 @@ public class Simple {
         // 加上最后一秒后的
         sum += duration;
         return sum;
+    }
+
+    /**
+     * 一个数组有2n个元素，其中有n个奇数、n个偶数，数组无序，写一个算法使得奇数位置放置奇数，偶数位置放置偶数
+     */
+    public static void exchangeOddEven(int[] nums) {
+        if (nums == null || nums.length <= 0 || (nums.length & 1) == 1) {
+            throw new IllegalArgumentException("nums为空或长度不为偶数");
+        }
+        // 存放下标是奇数，值是偶数的下标
+        LinkedList<Integer> oddList = new LinkedList<>();
+        // 存放下标是偶数，值是奇数的下标
+        LinkedList<Integer> evenList = new LinkedList<>();
+        int temp;
+        for (int i = 0; i < nums.length; i++) {
+            if ((i & 1) == 1 && (nums[i] & 1) == 0) {
+                // 下标是奇数，值是偶数
+                if (evenList.isEmpty()) {
+                    oddList.offer(i);
+                } else {
+                    Integer poll = evenList.poll();
+                    temp = nums[i];
+                    nums[i] = nums[poll];
+                    nums[poll] = temp;
+                }
+            } else if ((i & 1) == 0 && (nums[i] & 1) == 1) {
+                // 下标是偶数，值是奇数
+                if (oddList.isEmpty()) {
+                    evenList.offer(i);
+                } else {
+                    Integer poll = oddList.poll();
+                    temp = nums[i];
+                    nums[i] = nums[poll];
+                    nums[poll] = temp;
+                }
+            }
+        }
+    }
+
+    /**
+     * 一个数组有2n个元素，其中有n个奇数、n个偶数，数组无序，写一个算法使得奇数位置放置奇数，偶数位置放置偶数
+     * 空间复杂度更优
+     */
+    public static void exchangeOddEven2(int[] nums) {
+        if (nums == null || nums.length <= 0 || (nums.length & 1) == 1) {
+            throw new IllegalArgumentException("nums为空或长度不为偶数");
+        }
+        // 下标是奇数，值是偶数的指针
+        int oddIndex = 1;
+        boolean odd = false;
+        // 下标是偶数，值是奇数的指针
+        int evenIndex = 0;
+        boolean even = false;
+        int temp;
+        while (oddIndex < nums.length && evenIndex < nums.length) {
+            while (!odd && oddIndex < nums.length) {
+                if ((nums[oddIndex] & 1) == 0) {
+                    odd = true;
+                } else {
+                    oddIndex += 2;
+                }
+            }
+            while (!even && evenIndex < nums.length) {
+                if ((nums[evenIndex] & 1) == 1) {
+                    even = true;
+                } else {
+                    evenIndex += 2;
+                }
+            }
+            if (odd && even) {
+                temp = nums[oddIndex];
+                nums[oddIndex] = nums[evenIndex];
+                nums[evenIndex] = temp;
+                oddIndex += 2;
+                evenIndex += 2;
+                odd = false;
+                even = false;
+            }
+        }
     }
 
 }
