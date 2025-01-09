@@ -11,7 +11,7 @@ public class Simple {
     }
 
     /**
-     *  翻转二叉树：输入一个二叉树，该函数输出它的镜像。
+     * 翻转二叉树：输入一个二叉树，该函数输出它的镜像。
      *
      * @param root
      * @return
@@ -223,7 +223,7 @@ public class Simple {
         if (rightList.size() >= k) {
             return rightList.get(rightList.size() - k);
         }
-        throw new IllegalArgumentException("k比节点数小");
+        throw new IllegalArgumentException("k比节点数大");
     }
 
 }

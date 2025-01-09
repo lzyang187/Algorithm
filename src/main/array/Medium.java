@@ -15,6 +15,115 @@ public class Medium {
     }
 
     /**
+     * 旋转数组的最小数字：把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。
+     * 给你一个可能存在重复元素值的数组numbers，它原来是一个升序排列的数组，并按上述情形进行了一次旋转。请返回旋转数组的最小元素。
+     * 例如，数组[3,4,5,1,2] 为 [1,2,3,4,5] 的一次旋转，该数组的最小值为 1。
+     * 注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
+     */
+    public int minArray(int[] numbers) {
+        if (numbers == null || numbers.length <= 0) {
+            throw new IllegalArgumentException("参数错误");
+        }
+        if (numbers.length == 1) {
+            return numbers[0];
+        }
+        int front = 0;
+        int tail = numbers.length - 1;
+        if (numbers[front] < numbers[tail]) {
+            return numbers[0];
+        } else {
+            int mid = numbers.length / 2;
+            while (front < tail - 1) {
+                if (numbers[mid] > numbers[front]) {
+                    front = mid;
+                    mid = (front + tail) / 2;
+                } else if (numbers[mid] < numbers[front]) {
+                    tail = mid;
+                    mid = (front + tail) / 2;
+                } else {
+                    // 只能按顺序查找了
+                    int min = numbers[0];
+                    for (int i = 1; i < numbers.length; i++) {
+                        if (numbers[i] < min) {
+                            return numbers[i];
+                        }
+                    }
+                    break;
+                }
+            }
+            return numbers[tail];
+        }
+    }
+
+    /**
+     * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字
+     */
+    public static int[] spiralOrder(int[][] matrix) {
+        if (matrix == null || matrix.length <= 0 || matrix[0].length <= 0) {
+            return new int[]{};
+        }
+        int[] resultArray = new int[matrix.length * matrix[0].length];
+        int curArrayIndex = 0;
+        int startRow = 0;
+        int startCol = 0;
+        int endRow = matrix.length - 1;
+        int endCol = matrix[0].length - 1;
+        while (startRow <= endRow && startCol <= endCol) {
+            int curRow = startRow;
+            int curCol = startCol;
+            if (startRow == endRow) {
+                // 只有一行了
+                while (curCol <= endCol) {
+                    resultArray[curArrayIndex] = matrix[startRow][curCol];
+                    curArrayIndex++;
+                    curCol++;
+                }
+            } else if (startCol == endCol) {
+                // 只有一列了
+                while (curRow <= endRow) {
+                    resultArray[curArrayIndex] = matrix[curRow][startCol];
+                    curArrayIndex++;
+                    curRow++;
+                }
+            } else {
+                // 一周
+                // 上
+                while (curCol <= endCol) {
+                    resultArray[curArrayIndex] = matrix[startRow][curCol];
+                    curArrayIndex++;
+                    curCol++;
+                }
+                // 右
+                curRow++;
+                while (curRow <= endRow) {
+                    resultArray[curArrayIndex] = matrix[curRow][endCol];
+                    curArrayIndex++;
+                    curRow++;
+                }
+                // 下
+                curCol -= 2;
+                while (curCol >= startCol) {
+                    resultArray[curArrayIndex] = matrix[endRow][curCol];
+                    curArrayIndex++;
+                    curCol--;
+                }
+                // 左
+                curRow -= 2;
+                while (curRow > startRow) {
+                    resultArray[curArrayIndex] = matrix[curRow][startCol];
+                    curArrayIndex++;
+                    curRow--;
+                }
+            }
+            startRow++;
+            startCol++;
+            endRow--;
+            endCol--;
+        }
+        return resultArray;
+    }
+
+    /**
      * 二维数组中的查找
      * 在一个 n * m 的二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。
      * 请完成一个高效的函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数

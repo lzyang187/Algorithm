@@ -1,11 +1,14 @@
 package main.array;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Hard {
     public static void main(String[] args) {
         System.out.println(Arrays.toString(maxSlidingWindow(new int[]{9, 10, 9, -7, -4, -8, 2, -6}, 5)));
+//        System.out.println(Arrays.deepToString(findContinuousSequence(9)));
     }
 
     /**
@@ -47,6 +50,45 @@ public class Hard {
                 result[resultIndex] = nums[dequeue.peekFirst()];
                 resultIndex++;
             }
+        }
+        return result;
+    }
+
+    /**
+     * 和为s的连续正数序列：输入一个正整数 target ，输出所有和为 target 的连续正整数序列（至少含有两个数）。
+     * 序列内的数字由小到大排列，不同序列按照首个数字从小到大排列。
+     */
+    public static int[][] findContinuousSequence(int target) {
+        if (target <= 2) {
+            return null;
+        }
+        int small = 1;
+        int large = 2;
+        int maxLarge = (target + 1) >>> 1;
+        List<int[]> list = new ArrayList<>();
+        int subMaxCount = 0;
+        while (small < large && large <= maxLarge) {
+            int count = 0;
+            for (int i = small; i <= large; i++) {
+                count += i;
+            }
+            if (count == target) {
+                int[] sub = new int[large - small + 1];
+                for (int i = small; i <= large; i++) {
+                    sub[i - small] = i;
+                }
+                subMaxCount = Math.max(subMaxCount, sub.length);
+                list.add(sub);
+                large++;
+            } else if (count > target) {
+                small++;
+            } else {
+                large++;
+            }
+        }
+        int[][] result = new int[list.size()][subMaxCount];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
         }
         return result;
     }

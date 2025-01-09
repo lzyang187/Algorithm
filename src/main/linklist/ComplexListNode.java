@@ -3,16 +3,16 @@ package main.linklist;
 /**
  * 复杂链表
  */
-public class Node {
+public class ComplexListNode {
 
     public int val;
-    public Node next;
+    public ComplexListNode next;
     /**
      * random 指向链表中的任意节点或者 null
      */
-    public Node random;
+    public ComplexListNode random;
 
-    public Node(int val) {
+    public ComplexListNode(int val) {
         this.val = val;
     }
 }

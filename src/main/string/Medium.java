@@ -18,7 +18,7 @@ public class Medium {
      * 无重复字符的最长子串：给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
      */
     public static int lengthOfLongestSubstring(String s) {
-        if (s == null || s.length() <= 0) {
+        if (s == null || s.isEmpty()) {
             return 0;
         }
         int maxLength = 0;
@@ -58,7 +58,7 @@ public class Medium {
      * 自上向下递归，相对耗时
      */
     public static String longestPalindrome(String s, Map<String, String> map) {
-        if (s == null || s.length() < 1) {
+        if (s == null || s.isEmpty()) {
             return null;
         }
         if (isPalindromeStr(s)) {
@@ -93,7 +93,7 @@ public class Medium {
      * 最长回文子串：动态规划，分解子问题，如果i到j是回文串并且i-1和j+1相同，则i-1到j+1也是回文串
      */
     public static String longestPalindromeQuick(String s) {
-        if (s == null || s.length() < 1) {
+        if (s == null || s.isEmpty()) {
             return null;
         }
         if (s.length() == 1) {
