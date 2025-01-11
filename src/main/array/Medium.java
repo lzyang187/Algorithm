@@ -1,9 +1,10 @@
 package main.array;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Medium {
     public static void main(String[] args) {
@@ -20,7 +21,7 @@ public class Medium {
      * 例如，数组[3,4,5,1,2] 为 [1,2,3,4,5] 的一次旋转，该数组的最小值为 1。
      * 注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
      */
-    public int minArray(int[] numbers) {
+    public static int minArray(int[] numbers) {
         if (numbers == null || numbers.length <= 0) {
             throw new IllegalArgumentException("参数错误");
         }
@@ -30,6 +31,7 @@ public class Medium {
         int front = 0;
         int tail = numbers.length - 1;
         if (numbers[front] < numbers[tail]) {
+            // 旋转的数量是0
             return numbers[0];
         } else {
             int mid = numbers.length / 2;
@@ -217,44 +219,23 @@ public class Medium {
         if (arr == null || arr.length <= 0) {
             return 0;
         }
-        // 先对数组进行排序
-        Arrays.sort(arr);
-        List<Integer> countList = new ArrayList<>();
-        int curValue = arr[0];
-        int count = 1;
-        for (int i = 1; i < arr.length; i++) {
-            if (curValue == arr[i]) {
-                count++;
+        // Key是元素，Value是出现的次数
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            if (map.containsKey(arr[i])) {
+                map.put(arr[i], map.get(arr[i]) + 1);
             } else {
-                curValue = arr[i];
-                countList.add(count);
-                count = 1;
-            }
-            if (i == arr.length - 1) {
-                // 最后一个元素了
-                countList.add(count);
-                break;
+                map.put(arr[i], 1);
             }
         }
-        // 对数量从大到小进行排序
-        countList.sort(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                if (o1 > o2) {
-                    return -1;
-                } else if (o1 < o2) {
-                    return 1;
-                }
-                return 0;
-            }
-        });
-        int totalCount = 0;
+        List<Integer> countList = map.values().stream().sorted().collect(Collectors.toList());
         int result = 0;
-        for (Integer integer : countList) {
-            totalCount += integer;
+        int totalCount = 0;
+        for (int i = countList.size() - 1; i >= 0; i--) {
+            totalCount += countList.get(i);
             result++;
-            if (totalCount >= (Math.ceil((double) arr.length / 2))) {
-                return result;
+            if (totalCount * 2 >= arr.length) {
+                break;
             }
         }
         return result;
@@ -271,19 +252,19 @@ public class Medium {
         if (nums == null || nums.length <= 0) {
             return 0;
         }
-        int lastMax = nums[0];
-        int curMax = lastMax;
+        int result = nums[0];
+        int curMax = result;
         for (int i = 1; i < nums.length; i++) {
             curMax += nums[i];
             if (curMax < nums[i]) {
                 // 与当前数的和还没有当前数大
                 curMax = nums[i];
             }
-            if (curMax > lastMax) {
-                lastMax = curMax;
+            if (curMax > result) {
+                result = curMax;
             }
         }
-        return lastMax;
+        return result;
     }
 
     /**
@@ -321,17 +302,23 @@ public class Medium {
 
     /**
      * 矩阵中的路径：给定一个m x n 二维字符网格board 和一个字符串单词word 。如果word 存在于网格中，返回 true ；否则，返回 false 。
+     * 1、路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。
+     * 2、如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。
+     * 例如：包含“bfce”的路径，但不包含字符串“abfb”的路径
+     * ["a","b","c","e"],
+     * ["s","f","c","s"],
+     * ["a","d","e","e"]
      * 回溯法的典型例子
      */
     public boolean existPath(char[][] board, String word) {
-        if (board == null || board.length <= 0 || board[0].length <= 0 || word == null || word.length() <= 0) {
+        if (board == null || board.length <= 0 || board[0].length <= 0 || word == null || word.isEmpty()) {
             return false;
         }
         // 是否已经访问过的标记
         boolean[][] visited = new boolean[board.length][board[0].length];
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
-                if (checkPath(board, visited, i, j, word, 0)) {
+                if (checkPath(board, word, visited, i, j, 0)) {
                     return true;
                 }
             }
@@ -340,10 +327,10 @@ public class Medium {
     }
 
     /**
-     * 判断以网格的(i,j) 位置出发，能否搜索到单词word[k..]，其中word[k..] 表示字符串word 从第k 个字符开始的后缀子串。如果能搜索到，则返回
+     * 判断以网格的(i,j) 位置出发，能否搜索到单词word[k..]，其中word[k..] 表示字符串 word 从第 k 个字符开始的后缀子串。如果能搜索到，则返回
      * true，反之返回false。
      */
-    private boolean checkPath(char[][] board, boolean[][] visited, int i, int j, String word, int k) {
+    private boolean checkPath(char[][] board, String word, boolean[][] visited, int i, int j, int k) {
         if (i < 0 || i >= board.length) {
             return false;
         }
@@ -364,19 +351,19 @@ public class Medium {
             // 开始找下一个字符
             visited[i][j] = true;
             // 向上一步
-            if (checkPath(board, visited, i - 1, j, word, k + 1)) {
+            if (checkPath(board, word, visited, i - 1, j, k + 1)) {
                 return true;
             }
             // 向下一步
-            if (checkPath(board, visited, i + 1, j, word, k + 1)) {
+            if (checkPath(board, word, visited, i + 1, j, k + 1)) {
                 return true;
             }
             // 向左一步
-            if (checkPath(board, visited, i, j - 1, word, k + 1)) {
+            if (checkPath(board, word, visited, i, j - 1, k + 1)) {
                 return true;
             }
             // 向右一步
-            if (checkPath(board, visited, i, j + 1, word, k + 1)) {
+            if (checkPath(board, word, visited, i, j + 1, k + 1)) {
                 return true;
             }
             // 上下左右都不满足，则重置这个节点的访问状态
