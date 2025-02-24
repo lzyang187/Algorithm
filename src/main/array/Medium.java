@@ -1,9 +1,6 @@
 package main.array;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Medium {
@@ -13,6 +10,7 @@ public class Medium {
         System.out.println(searchMatrix(matrix, 1));
 //        System.out.println(maxSubArray(new int[]{-1, 0, -2}));
         System.out.println(maxValue(matrix));
+        System.out.println(findKthLargest(new int[]{4, 5, 6, 7, 0, 1, 2}, 3));
     }
 
     /**
@@ -432,6 +430,92 @@ public class Medium {
             number /= 10;
         }
         return sum;
+    }
+
+    /**
+     * 数组中的第K个最大元素
+     * 给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。
+     * 请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+     * 你必须设计并实现时间复杂度为 O(n) 的算法解决此问题。
+     * 示例 1:
+     * 输入: [3,2,1,5,6,4], k = 2
+     * 输出: 5
+     * 示例 2:
+     * 输入: [3,2,3,1,2,4,5,5,6], k = 4
+     * 输出: 4
+     */
+    public static int findKthLargest(int[] nums, int k) {
+        if (nums == null || k <= 0 || nums.length < k) {
+            throw new IllegalArgumentException("Invalid argument");
+        }
+        int targetIndex = nums.length - k;
+        int left = 0;
+        int right = nums.length - 1;
+        int partition;
+        do {
+            if (left >= right) {
+                break;
+            }
+            partition = main.sort.Simple.partition(nums, left, right);
+            if (partition < targetIndex) {
+                left = partition + 1;
+            } else {
+                right = partition - 1;
+            }
+        } while (partition != targetIndex);
+        return nums[targetIndex];
+    }
+
+    /**
+     * 最小的k个数：基于Partition函数时间复杂度为O(n)的算法，判断一轮快速排序后的下标是否是k-1
+     */
+    public static int[] getLeastNumbersQuick(int[] arr, int k) {
+        if (arr == null || k <= 0 || arr.length < k) {
+            throw new IllegalArgumentException("Invalid argument");
+        }
+        int targetIndex = k - 1;
+        int left = 0;
+        int right = arr.length - 1;
+        int partition;
+        do {
+            if (left >= right) {
+                break;
+            }
+            partition = main.sort.Simple.partition(arr, left, right);
+            if (partition < targetIndex) {
+                left = partition + 1;
+            } else {
+                right = partition - 1;
+            }
+        } while (partition != targetIndex);
+        return Arrays.copyOfRange(arr, 0, k);
+    }
+
+    /**
+     * 多数元素：给定一个大小为 n 的数组nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 n/2 的元素。
+     * 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+     * 基于Partition函数时间复杂度为O(n)的算法。判断一轮快速排序后的下标是否是n/2
+     */
+    public static int majorityElementQuick(int[] nums) {
+        if (nums == null || nums.length <= 0) {
+            throw new IllegalArgumentException("参数不合法");
+        }
+        int targetIndex = nums.length >>> 1;
+        int left = 0;
+        int right = nums.length - 1;
+        int partition;
+        do {
+            if (left >= right) {
+                break;
+            }
+            partition = main.sort.Simple.partition(nums, left, right);
+            if (partition < targetIndex) {
+                left = partition + 1;
+            } else {
+                right = partition - 1;
+            }
+        } while (partition != targetIndex);
+        return nums[targetIndex];
     }
 
 }
